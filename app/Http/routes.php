@@ -23,5 +23,16 @@ Route::group(['prefix' => 'api'], function () {
 
     Route::group(['prefix' => 'users'], function () {
     	Route::post('/add', 'UserManagementController@addBoothUser');
+    	Route::get('{id}', 'UserManagementController@getUserDetails');
+    	Route::post('/update','UserManagementController@userUpdate');
+    });
+
+    Route::group(['prefix'=>'toll'],function(){
+    	Route::post('/add','UserManagementController@addTollDetails');
+    });
+
+
+    Route::group(['prefix'=>'vipuser'],function(){
+    	Route::post('/add','UserManagementController@addVIPusers');
     });
 });
