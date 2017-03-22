@@ -18,10 +18,11 @@ class CreateUserWalletsTable extends Migration
             $table->foreign('user_id')
                   ->references('id')
                   ->on('users');
-            $table->bigInteger('bank_acc_details')->comment('bank account details of user');
+            $table->string('txn_id')->comment("generated for payment gateway");
             $table->string('txn_details');
             $table->decimal('amount',10,2)->default("0.00");
             $table->string('json_data');
+            $table->enum('status',['0','1'])->comment("0 for failure and 1 for success.");
             $table->timestamps();
         });
     }

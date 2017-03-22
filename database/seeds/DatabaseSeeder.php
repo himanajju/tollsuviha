@@ -9,7 +9,8 @@ class DatabaseSeeder extends Seeder
     
     private $tables = array(
         'usergroups',
-        'users'
+        'users',
+        'vehicles'
     );
     /**
      * Run the database seeds.
@@ -22,6 +23,7 @@ class DatabaseSeeder extends Seeder
         $this->cleanDatabase();
         $this->call(UsergroupsTableSeeder::class);
         $this->call(UsersTableSeeder::class);
+        $this->call(VehiclesTableSeeder::class);
     }
 
     
