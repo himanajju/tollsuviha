@@ -12,6 +12,7 @@ use App\User;
 use App\Usergroup;
 use App\TollDetail;
 use App\VipUser;
+use App\Vehicle;
 use DB;
 
 class UserManagementController extends Controller
@@ -256,5 +257,42 @@ class UserManagementController extends Controller
         exit;
     }
 
+    //function for getting details of vechile
+
+    public function getVechileDetails($vehicle_no,$userId){
+     //Getting user details
+        $userOBJ=User::where('id','=',$userId)->where('usergroup_id','=',3)->where('is_active','=',1)->get();
+        if(!$userOBJ->isEmpty()){
+        $VehicleOBJ=Vehicle::where('vehicle_no','=',$vehicle_no)->get();
+        if(!$VehicleOBJ->isEmpty()){
+            $VehicleOBJ=$VehicleOBJ->first();
+            $responseData=array(
+                'vechile_no'=>$VehicleOBJ->vehicle_no,
+                'vechile_type'=>$VehicleOBJ->vehicle_type
+                );
+                //return to client
+            $response=[
+                    'status'=>200,
+                    'message'=>'vechile data is fetched Successfully.',
+                    'data'=>$responseData
+            ];
+
+        }else{
+            $response=[
+                'status'=>501,
+                'message'=>'vechile not registrated.'
+            ];
+        }
+    }else{
+        $response=[
+                'status'=>501,
+                'message'=>'unauthorized user'
+            ];
+      
+    }
+        return response()->json($response);
+        exit;
     
+    }
+
 }

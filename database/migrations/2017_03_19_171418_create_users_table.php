@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
         Schema::create('users', function (Blueprint $table) { 
             $table->bigIncrements('id');
             $table->string('name')->comment('Full name of users');
-            $table->string('email')->unique();
+            $table->string('email')->unique()->nullable();
             $table->string('password')->comment('login password');
             $table->string('contact_no');
             $table->decimal('wallet_amt',15,2)->default('0.00')->comment('balance amount in wallet');

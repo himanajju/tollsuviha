@@ -21,5 +21,15 @@ class UsersTableSeeder extends Seeder
                                     'is_active' => '1',
                                     'created_at' => '2016-11-15 00:00:00',
                                     'updated_at' => '2016-11-15 00:00:00']);
+        DB::table('users')->insert(['id' => '2',
+                                    'usergroup_id' => '3',
+                                    'name' => 'Booth Operator',
+                                    'email' => 'booth@mail.com',
+                                    'password' => '123456',
+                                    'contact_no' => '7509206653',
+                                    'wallet_amt' => '0.00',
+                                    'is_active' => '0',
+                                    'created_at' => '2016-11-15 00:00:00',
+                                    'updated_at' => '2016-11-15 00:00:00']);
     }
 }
