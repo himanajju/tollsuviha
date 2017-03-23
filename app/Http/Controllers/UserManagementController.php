@@ -35,7 +35,7 @@ class UserManagementController extends Controller
                          'errors'    => $validation->errors()];
         }else{
             //Getting usergroup
-            $usergroupOBJ = Usergroup::where('id', '=', '3')->get();
+            $usergroupOBJ = Usergroup::where('id', '=', $request->input('usergroup'))->get();
             if(!$usergroupOBJ->isEmpty()){
                 $usergroupOBJ = $usergroupOBJ->first();
                 
