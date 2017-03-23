@@ -28,7 +28,7 @@ Route::group(['prefix' => 'api'], function () {
     });
 
     Route::group(['prefix'=>'toll'],function(){
-    	Route::post('/add','UserManagementController@addTollDetails');
+    	Route::post('/getall','UserManagementController@getAllTollDetails');
     });
 
 

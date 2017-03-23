@@ -161,62 +161,78 @@ class UserManagementController extends Controller
 
     }
 
-    //registration of toll and filling tolldetails
-    public function addTollDetails(Request $request){
-        //setting validation rules for all fields
-        $validation=Validator::make($request->toArray(),[
-                'toll_id'=>'required',
-                'toll_name'=>'required',
-                'city'=>'required',
-                'state'=>'required',
-                'car_jeep_van_price'=>'required',
-                'lcv_price' => 'required',
-                'bus_truck_price'=>'required',
-                'upto_3_axle_vehicle_price'=>'required',
-                'axle_4_to_6_vehicle_price'=>'required',
-                'axle_7_or_more_vehicle_price'=>'required',
-                'hcm_eme_price'=>'required',
-                'highway'=>'required|digits:1'
-            ]);
-            if($validation->fails()){
-                //validation errors
-                $response=['status'=>500,
-                    'message'=>'validation failed',
-                    'errors'=>$validation->errors()
-                ];
-            }else
-            {
-                //fetching toll details
-                $tollOBJ=new TollDetail;
-                $tollOBJ->toll_id=$request->input('toll_id');
-                $tollOBJ->toll_name=$request->input('toll_name');
-                $tollOBJ->city=$request->input('city');
-                $tollOBJ->state=$request->input('state');
-                $tollOBJ->car_jeep_van_price=$request->input('car_jeep_van_price');
-                $tollOBJ->lcv_price=$request->input('lcv_price');
-                $tollOBJ->bus_truck_price=$request->input('bus_truck_price');
-                $tollOBJ->upto_3_axle_vehicle_price=$request->input('upto_3_axle_vehicle_price');
-                $tollOBJ->axle_4_to_6_vehicle_price=$request->input('axle_4_to_6_vehicle_price');
-                $tollOBJ->axle_7_or_more_vehicle_price=$request->input('axle_7_or_more_vehicle_price');
-                $tollOBJ->hcm_eme_price=$request->input('hcm_eme_price');
-                $tollOBJ->highway=$request->input('highway');
-                try{
-                        //saving toll details
-                    $tollOBJ->save();
-                    //return to client
-                    $response=[ 'status'=>200,
-                    'message'=>'toll details are inserted'
-                    ];
+    // //registration of toll and filling tolldetails
+    // public function addTollDetails(Request $request){
+    //     //setting validation rules for all fields
+    //     $validation=Validator::make($request->toArray(),[
+    //             'toll_id'=>'required',
+    //             'toll_name'=>'required',
+    //             'city'=>'required',
+    //             'state'=>'required',
+    //             'car_jeep_van_price'=>'required',
+    //             'lcv_price' => 'required',
+    //             'bus_truck_price'=>'required',
+    //             'upto_3_axle_vehicle_price'=>'required',
+    //             'axle_4_to_6_vehicle_price'=>'required',
+    //             'axle_7_or_more_vehicle_price'=>'required',
+    //             'hcm_eme_price'=>'required',
+    //             'highway'=>'required|digits:1'
+    //         ]);
+    //         if($validation->fails()){
+    //             //validation errors
+    //             $response=['status'=>500,
+    //                 'message'=>'validation failed',
+    //                 'errors'=>$validation->errors()
+    //             ];
+    //         }else
+    //         {
+    //             //fetching toll details
+    //             $tollOBJ=new TollDetail;
+    //             $tollOBJ->toll_id=$request->input('toll_id');
+    //             $tollOBJ->toll_name=$request->input('toll_name');
+    //             $tollOBJ->city=$request->input('city');
+    //             $tollOBJ->state=$request->input('state');
+    //             $tollOBJ->car_jeep_van_price=$request->input('car_jeep_van_price');
+    //             $tollOBJ->lcv_price=$request->input('lcv_price');
+    //             $tollOBJ->bus_truck_price=$request->input('bus_truck_price');
+    //             $tollOBJ->upto_3_axle_vehicle_price=$request->input('upto_3_axle_vehicle_price');
+    //             $tollOBJ->axle_4_to_6_vehicle_price=$request->input('axle_4_to_6_vehicle_price');
+    //             $tollOBJ->axle_7_or_more_vehicle_price=$request->input('axle_7_or_more_vehicle_price');
+    //             $tollOBJ->hcm_eme_price=$request->input('hcm_eme_price');
+    //             $tollOBJ->highway=$request->input('highway');
+    //             try{
+    //                     //saving toll details
+    //                 $tollOBJ->save();
+    //                 //return to client
+    //                 $response=[ 'status'=>200,
+    //                 'message'=>'toll details are inserted'
+    //                 ];
 
-                    }catch(\Exception $e){
-                        //return to client
-                        $response = ['status'=>501,
-                                    'message'=>'Oops!! something went wrong please try again later.'];
-                    }
+    //                 }catch(\Exception $e){
+    //                     //return to client
+    //                     $response = ['status'=>501,
+    //                                 'message'=>'Oops!! something went wrong please try again later.'];
+    //                 }
                        
-            }
-            return response()->json($response);
-            exit;
+    //         }
+    //         return response()->json($response);
+    //         exit;
+    // }
+
+
+    //function for getting TOLL details
+    public function getAllTollDetails()
+    {
+        //getting toll details
+        $tollOBJ=TollDetail::all(['toll_id','toll_name','city','state','latitude','longitude','car_jeep_van_price','lcv_price','bus_truck_price','upto_3_axle_vehicle_price','axle_4_to_6_vehicle_price','axle_7_or_more_vehicle_price','hcm_eme_price','highway']);
+        $response=['status'=>200,
+            'message'=>'all toll details have Successfully fetched.',
+            'data'=>$tollOBJ
+        ];
+        //return to client
+        return response()->json($response);
+        exit;
+        
     }
 
     //function for inserting VIP_users

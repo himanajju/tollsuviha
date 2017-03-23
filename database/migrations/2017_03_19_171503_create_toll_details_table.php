@@ -18,6 +18,8 @@ class CreateTollDetailsTable extends Migration
             $table->string('toll_name')->comment('name of toll plaza');
             $table->string('city')->comment('location of toll plaza');
             $table->string('state')->comment('toll plaza region');
+            $table->string('latitude')->comment('latitude postion of toll plaza.');
+            $table->string('longitude')->comment('longitude postion of toll plaza');
             $table->decimal('car_jeep_van_price',4,2)->default('0.00')->comment('car/jeep/van price');
             $table->decimal('lcv_price',4,2)->default('0.00')->comment('LVC price');
             $table->decimal('bus_truck_price',4,2)->default('0.00')->comment('bus/truck price');
