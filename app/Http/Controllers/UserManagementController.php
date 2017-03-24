@@ -125,7 +125,6 @@ class UserManagementController extends Controller
             //getting user is exist
             $userExistObj=User::where('id','=',$request->input('id'))->get();
             if(!$userExistObj->isEmpty()){
-                DB::beginTransaction();
                 
                 try{
                     //updating data
@@ -136,14 +135,12 @@ class UserManagementController extends Controller
                         'password'=>$request->input('password'),
                         'contact_no'=>$request->input('contact_no')
                         ]);
-                    DB::commit();
                     $response=[
                         'status'=>200,
                         'message'=>'Updated Successfully.'
                     ];
                 }catch(\Exception $e){
                     //return to client
-                    DB::rollBack();
                     $response = ['status'=> 501,
                         'message'=>'Oops!! something went wrong please try again later.'
                     ];

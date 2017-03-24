@@ -19,10 +19,9 @@ class CreateUserWalletsTable extends Migration
                   ->references('id')
                   ->on('users');
             $table->string('txn_id')->comment("generated for payment gateway");
-            $table->string('txn_details');
             $table->decimal('amount',10,2)->default("0.00");
             $table->string('json_data');
-            $table->enum('status',['0','1'])->comment("0 for failure and 1 for success.");
+            $table->enum('status',['SUCCESS','FAILURE']);
             $table->timestamps();
         });
     }

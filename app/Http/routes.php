@@ -31,6 +31,10 @@ Route::group(['prefix' => 'api'], function () {
     	Route::post('/getall','UserManagementController@getAllTollDetails');
     });
 
+	Route::group(['prefix'=>'txn'],function(){
+	    	Route::post('/add','TxnManagementController@addTxnDetails');
+	    });
+
 
     Route::group(['prefix'=>'vipuser'],function(){
     	Route::post('/add','UserManagementController@addVIPusers');
