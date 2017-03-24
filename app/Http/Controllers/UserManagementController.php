@@ -13,6 +13,7 @@ use App\Usergroup;
 use App\TollDetail;
 use App\VipUser;
 use App\Vehicle;
+use App\TollUser;
 use DB;
 
 class UserManagementController extends Controller
@@ -37,6 +38,8 @@ class UserManagementController extends Controller
             //Getting usergroup
             $usergroupOBJ = Usergroup::where('id', '=', $request->input('usergroup'))->get();
             if(!$usergroupOBJ->isEmpty()){
+                DB::beginTransaction();
+
                 $usergroupOBJ = $usergroupOBJ->first();
                 
                 $newUserOBJ = new User;
@@ -52,15 +55,35 @@ class UserManagementController extends Controller
                 try{
                     //saving user detail
                     $newUserOBJ->save();
-                    // return to client
-                    $response = ['status' => 200,
-                                 'message'   => 'Registration Successfull.'];
+
+                    if($usergroupOBJ->group_title == "MANAGER" || $usergroupOBJ->group_title == "BOOTH_OPERATOR"){
+                        $tollOBJ = TollDetail::where('id', '=', 1)->get();
+                        if(!$tollOBJ->isEmpty()){   
+                            $tollUserOBJ = new TollUser();
+                            
+                            $tollUserOBJ->user()->associate($newUserOBJ);
+                            $tollUserOBJ->toll()->associate($tollOBJ->first());
+
+                            //saving user detail
+                            $tollUserOBJ->save();
+                            DB::commit();
+                            // return to client
+                            $response = ['status' => 200,
+                                         'message'   => 'Registration Successfull.'];
+                        }else{
+                            DB::rollback();
+                            $response = ['status' => 501,
+                                         'message'   => 'Oops!! something went wrong please try again later.'];
+                        }
+                    }
                 }catch(\Exception $e){
+                    DB::rollback();
                     // return to client
                     $response = ['status' => 501,
                                  'message'   => 'Oops!! something went wrong please try again later.'];
                 }
             }else{
+                DB::rollback();
                 // return to client
                 $response = ['status' => 501,
                              'message'   => 'Oops!! something went wrong please try again later.'];

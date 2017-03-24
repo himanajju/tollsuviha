@@ -22,7 +22,7 @@ Route::group(['prefix' => 'api'], function () {
 
 
     Route::group(['prefix' => 'users'], function () {
-    	Route::post('/add', 'UserManagementController@addBoothUser');
+    	Route::post('/add', 'UserManagementController@addUser');
     	Route::get('/{id}', 'UserManagementController@getUserDetails');
     	Route::post('/update','UserManagementController@userUpdate');
     });
