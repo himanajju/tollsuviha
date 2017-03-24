@@ -62,7 +62,7 @@ class TxnManagementController extends Controller
     				];
     			}catch(\Excpetion $e){
     				//return to client
-    				DB::	rollback();
+    				DB::rollback();
     				$response=[
     					'status'=>501,
     					'message'=>'Oops!! something went wrong please try again later.'
