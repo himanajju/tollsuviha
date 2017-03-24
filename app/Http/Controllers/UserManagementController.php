@@ -181,8 +181,8 @@ class UserManagementController extends Controller
 
     }
 
-    // //registration of toll and filling tolldetails
-    // public function addTollDetails(Request $request){
+    // //registration of toll and filling tolldetailsOBJ
+    // public function addtolldetailsOBJ(Request $request){
     //     //setting validation rules for all fields
     //     $validation=Validator::make($request->toArray(),[
     //             'toll_id'=>'required',
@@ -241,7 +241,7 @@ class UserManagementController extends Controller
 
 
     //function for getting TOLL details
-    public function getAllTollDetails()
+    public function getAlltolldetailsOBJ()
     {
         //getting toll details
         $tollOBJ=TollDetail::all(['toll_id','toll_name','city','state','latitude','longitude','car_jeep_van_price','lcv_price','bus_truck_price','upto_3_axle_vehicle_price','axle_4_to_6_vehicle_price','axle_7_or_more_vehicle_price','hcm_eme_price','highway']);
@@ -293,42 +293,67 @@ class UserManagementController extends Controller
         exit;
     }
 
-    //function for getting details of vechile
+    //function for getting details of vechile and toll price
 
-    public function getVechileDetails($vehicle_no,$userId){
+    public function getVechileDetails($vehicleNo,$userId,$tollId){
      //Getting user details
-        $userOBJ=User::where('id','=',$userId)->where('usergroup_id','=',3)->where('is_active','=',1)->get();
+        $userOBJ=User::where('id','=',$userId)->where('usergroup  _id','=',3)->where('is_active','=',1)->get();
+        $price="";
         if(!$userOBJ->isEmpty()){
-        $VehicleOBJ=Vehicle::where('vehicle_no','=',$vehicle_no)->get();
-        if(!$VehicleOBJ->isEmpty()){
-            $VehicleOBJ=$VehicleOBJ->first();
-            $responseData=array(
-                'vechile_no'=>$VehicleOBJ->vehicle_no,
-                'vechile_type'=>$VehicleOBJ->vehicle_type
-                );
-                //return to client
-            $response=[
-                    'status'=>200,
-                    'message'=>'vechile data is fetched Successfully.',
-                    'data'=>$responseData
-            ];
+            $VehicleOBJ=Vehicle::where('vehicle_no','=',$vehicleNo)->get();
+            if(!$VehicleOBJ->isEmpty()){
+                $VehicleOBJ=$VehicleOBJ->first();
+                $tolldetailsOBJ=TollDetail::where('id','=',$tollId)->get()->first();
+                if($VehicleOBJ->vehicle_type=="car_jeep_van"){
+                    $price=$tolldetailsOBJ->car_jeep_van_price;
+                }elseif ($VehicleOBJ->vehicle_type=="bus_truck") {
+                    $price=$tolldetailsOBJ->bus_truck_price;
+                }elseif ($VehicleOBJ->vehicle_type=="lcv") {
+                    $price=$tolldetailsOBJ->lcv_price;
+                }elseif ($VehicleOBJ->vehicle_type=="upto_3_axle_vehicle") {
+                    $price=$tolldetailsOBJ->upto_3_axle_vehicle_price;
+                }elseif ($VehicleOBJ->vehicle_type=="axle_4_to_6_vehicle") {
+                    $price=$tolldetailsOBJ->axle_4_to_6_vehicle_price;
+                }elseif ($VehicleOBJ->vehicle_type=="axle_7_or_more_vehicle") {
+                    $price=$tolldetailsOBJ->axle_7_or_more_vehicle_price;
+                }elseif ($VehicleOBJ->vehicle_type=="hcm_eme") {
+                    $price=$tolldetailsOBJ->hcm_eme_price;                
+                }
+                $responseData=array(
+                    'vechile_no'=>$VehicleOBJ->vehicle_no,
+                    'vehicle_type'=>$VehicleOBJ->vehicle_type,
+                    'amount'=>$price
+                    );
+                    //return to client
+                $response=[
+                        'status'=>200,
+                        'message'=>'vechile data is fetched Successfully.',
+                        'data'=>$responseData
+                ];
 
+            }else{
+                $response=[
+                    'status'=>501,
+                    'message'=>'vechile not registrated.'
+                ];
+            }
         }else{
             $response=[
-                'status'=>501,
-                'message'=>'vechile not registrated.'
-            ];
+                    'status'=>501,
+                    'message'=>'unauthorized user'
+                ];
+          
         }
-    }else{
-        $response=[
-                'status'=>501,
-                'message'=>'unauthorized user'
-            ];
-      
-    }
         return response()->json($response);
         exit;
-    
+     
     }
 
+    //genrate random string
+    // private function genrateRndomString()
+    // {
+    //     return
+    // }
+
 }
+

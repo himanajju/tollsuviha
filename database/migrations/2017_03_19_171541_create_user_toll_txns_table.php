@@ -14,10 +14,18 @@ class CreateUserTollTxnsTable extends Migration
     {
         Schema::create('user_toll_txns', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->bigInteger('wallet_id')->unsigned();
-            $table->foreign('wallet_id')
+            $table->bigInteger('user_id')->unsigned();
+            $table->foreign('user_id')
                   ->references('id')
-                  ->on('user_wallets');
+                  ->on('users');
+            $table->string('vehicle_no');
+            $table->enum('vehicle_type',['car_jeep_van','lcv','Bus_truck','axle_upto_3','axle_4_to_6','axle_7_or_more','hcm_eme']);
+            $table->decimal('toll_amount',5,2)->default('0.00');
+            $table->bigInteger('toll_id')->unsigned();
+            $table->foreign('toll_id')
+                  ->references('id')
+                  ->on('toll_details');
+            $table->string('wallet_id');
             $table->decimal('amount',4,2)->default('0.00');
             $table->string('txn_id')->unique();
             $table->string('json_data');
@@ -25,11 +33,7 @@ class CreateUserTollTxnsTable extends Migration
             $table->bigInteger('created_by')->nullable()->unsigned();
             $table->foreign('created_by')
                   ->references('id')
-                  ->on('users');
-            $table->bigInteger('update_by')->nullable()->unsigned();
-            $table->foreign('update_by')
-                  ->references('id')
-                  ->on('users');
+                  ->on('users'); 
         });
     }
 
