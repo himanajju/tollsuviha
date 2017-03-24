@@ -58,7 +58,7 @@ class TxnManagementController extends Controller
     				DB::commit();
     				$response=[
     					'status'=>200,
-    					'message'=>'txn details inserted successfully.'
+    					'message'=>'txn details inserted successfully and amount added to users wallet.'
     				];
     			}catch(\Excpetion $e){
     				//return to client

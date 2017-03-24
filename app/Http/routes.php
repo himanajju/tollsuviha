@@ -22,7 +22,7 @@ Route::group(['prefix' => 'api'], function () {
 
 
     Route::group(['prefix' => 'users'], function () {
-    	Route::post('/add', 'UserManagementController@addBoothUser');
+    	Route::post('/add', 'UserManagementController@addUser');
     	Route::get('/{id}', 'UserManagementController@getUserDetails');
     	Route::post('/update','UserManagementController@userUpdate');
     });
@@ -31,7 +31,7 @@ Route::group(['prefix' => 'api'], function () {
     	Route::post('/getall','UserManagementController@getAllTollDetails');
     });
 
-	Route::group(['prefix'=>'txn'],function(){
+	Route::group(['prefix'=>'wallet'],function(){
 	    	Route::post('/add','TxnManagementController@addTxnDetails');
 	    });
 

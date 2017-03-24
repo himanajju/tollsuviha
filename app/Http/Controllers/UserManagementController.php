@@ -117,7 +117,7 @@ class UserManagementController extends Controller
             //validation errors
             $response=[
                 'status'=>500,
-                'message'=>'Validation failed',
+                'message'=>'    Validation failed',
                 'errors'=>$validation->errors()
             ];
         }else
