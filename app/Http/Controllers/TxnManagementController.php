@@ -229,4 +229,31 @@ class TxnManagementController extends Controller
     	return response()->json($response);
     	exit;
     }
+
+    //function for fetching users payment history
+    public function payHistory($userId)
+    {
+    	$userOBJ=User::where('id','=',$userId)->where('is_active','=',1)->where('usergroup_id','=',2)->get();
+    	if(!$userOBJ->isEmpty())
+    	{
+    		$userOBJ=$userOBJ->first();
+    		$historyOBJ=DB::select('SELECT ut.vehicle_no,ut.vehicle_type,ut.created_at,ut.toll_amount,td.toll_name FROM `user_toll_txns` ut,`toll_details` td WHERE ut.`toll_id` = td.`id` AND ut.`user_id` =:user_Id',['user_Id'=>$userId]);
+
+    		
+    		//return to client
+    		$response=[
+    			'status'=>200,
+    			'message'=>'history is successfully fetched.',
+    			'data'=>$historyOBJ
+    		];
+    	}else{
+    		//return to client
+    		$response=[
+    			'status'=>501,
+    			'message'=>'user does not exist.'
+    		];
+    	}
+    	return response()->json($response);
+    	exit;
+    }
 }

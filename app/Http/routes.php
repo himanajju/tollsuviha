@@ -25,6 +25,7 @@ Route::group(['prefix' => 'api'], function () {
     	Route::post('/add', 'UserManagementController@addUser');
     	Route::get('/{id}', 'UserManagementController@getUserDetails');
     	Route::post('/update','UserManagementController@userUpdate');
+    	Route::get('/pay-history/{userId}','TxnManagementController@payHistory');
     });
 
     Route::group(['prefix'=>'toll'],function(){

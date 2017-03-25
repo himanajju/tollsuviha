@@ -100,19 +100,19 @@ class AuthorizationController extends Controller
                 $newUserOBJ->email = $request->input('email');
                 $newUserOBJ->password = $request->input('password');
                 $newUserOBJ->contact_no = $request->input('contact_no');
-                wallet:{
-                        $walletId = $this->getRandomString(7);
-                        $walletIdCon="WLT".$walletId."";
-                        $walletIdExist = User::where('wallet_id','=',$walletIdCon)->get();
-                        if($walletIdExist->isEmpty())
-                        {
-                            $newUserOBJ->wallet_id=$walletIdCon;     
-                        }else
-                        {
-                            goto wallet;
+                    wallet:{
+                            $walletId = $this->getRandomString(7);
+                            $walletIdCon="WLT".$walletId."";
+                            $walletIdExist = User::where('wallet_id','=',$walletIdCon)->get();
+                            if($walletIdExist->isEmpty())
+                            {
+                                $newUserOBJ->wallet_id=$walletIdCon;     
+                            }else
+                            {
+                                goto wallet;
+                            }
                         }
-                    }
-                
+                    
                 $newUserOBJ->wallet_amt = '0.00';
                 $newUserOBJ->is_active = '1';
 
