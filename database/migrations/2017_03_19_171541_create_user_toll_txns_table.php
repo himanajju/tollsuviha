@@ -19,14 +19,13 @@ class CreateUserTollTxnsTable extends Migration
                   ->references('id')
                   ->on('users');
             $table->string('vehicle_no');
-            $table->enum('vehicle_type',['car_jeep_van','lcv','Bus_truck','axle_upto_3','axle_4_to_6','axle_7_or_more','hcm_eme']);
+            $table->enum('vehicle_type',['car_jeep_van','lcv','bus_truck','upto_3_axle_vehicle','axle_4_to_6_vehicle','axle_7_or_more_vehcile','hcm_eme']);
             $table->decimal('toll_amount',5,2)->default('0.00');
             $table->bigInteger('toll_id')->unsigned();
             $table->foreign('toll_id')
                   ->references('id')
                   ->on('toll_details');
             $table->string('wallet_id');
-            $table->decimal('amount',4,2)->default('0.00');
             $table->string('txn_id')->unique();
             $table->string('json_data');
             $table->timestamps();

@@ -29,11 +29,12 @@ Route::group(['prefix' => 'api'], function () {
 
     Route::group(['prefix'=>'toll'],function(){
     	Route::post('/getall','UserManagementController@getAllTollDetails');
+    	Route::post('/pay','TxnManagementController@tollPayment');
     });
 
 	Route::group(['prefix'=>'wallet'],function(){
-	    	Route::post('/add','TxnManagementController@addTxnDetails');
-	    });
+	    Route::post('/add','TxnManagementController@addTxnDetails');
+	});
 
 
     Route::group(['prefix'=>'vipuser'],function(){

@@ -63,6 +63,16 @@ class AuthorizationController extends Controller
         exit;
     }
 
+    //fucntion for genrating random string
+    private static function getRandomString($length){
+        $chars = '0123456789';
+        $string = '';
+        for ($i = 0; $i < $length; $i++) {
+            $string .= $chars[rand(0, strlen($chars) - 1)];
+        }
+        return $string;
+    }
+
 
     //Function for creating user
     public function registration(Request $request){
@@ -83,15 +93,26 @@ class AuthorizationController extends Controller
             //Getting usergroup
             $usergroupOBJ = Usergroup::where('id', '=', '2')->get();
             if(!$usergroupOBJ->isEmpty()){
-                $usergroupOBJ = $usergroupOBJ->first();
-                
+                $usergroupOBJ = $usergroupOBJ->first();            
                 $newUserOBJ = new User;
-                
                 $newUserOBJ->usergroup()->associate($usergroupOBJ);
                 $newUserOBJ->name = $request->input('name');
                 $newUserOBJ->email = $request->input('email');
                 $newUserOBJ->password = $request->input('password');
                 $newUserOBJ->contact_no = $request->input('contact_no');
+                wallet:{
+                        $walletId = $this->getRandomString(7);
+                        $walletIdCon="WLT".$walletId."";
+                        $walletIdExist = User::where('wallet_id','=',$walletIdCon)->get();
+                        if($walletIdExist->isEmpty())
+                        {
+                            $newUserOBJ->wallet_id=$walletIdCon;     
+                        }else
+                        {
+                            goto wallet;
+                        }
+                    }
+                
                 $newUserOBJ->wallet_amt = '0.00';
                 $newUserOBJ->is_active = '1';
 

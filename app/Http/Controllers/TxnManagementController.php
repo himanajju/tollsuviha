@@ -10,6 +10,9 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use App\User;
 use App\UserWallet;
+use App\UserTollTxn;
+use App\Vehicle;
+use App\TollDetail;
 use DB;
 
 class TxnManagementController extends Controller
@@ -74,6 +77,152 @@ class TxnManagementController extends Controller
     			$response=[
     				'status'=>501,
     				'message'=>'user does not exist'
+    			];
+    		}
+    	}
+    	return response()->json($response);
+    	exit;
+    }
+    //fucntion for genrating random string
+    private static function getRandomString($length){
+        $chars = '0123456789';
+        $string = '';
+        for ($i = 0; $i < $length; $i++) {
+            $string .= $chars[rand(0, strlen($chars) - 1)];
+        }
+        return $string;
+    }
+
+    //toll payment txn
+    public function tollPayment(Request $request)
+    {
+    	//setting validation rules
+    	$validation=Validator::make($request->toArray(),[
+    		'user_id'=>'required',
+    		'vehicle_no'=>'required',
+    		'toll_id'=>'required',
+    		]);
+    	if($validation->fails())
+    	{
+    		//error
+    		$response=[
+    			'status'=>500,
+    			'message'=>'validation errors',
+    			'errors'=>$validation->errors()
+      		];
+    	}else
+    	{
+    		
+    		$userExistOBJ=User::where('id','=',$request->input('user_id'))->where('usergroup_id','=','2')->where('is_active','=',1)->get();
+    		if(!$userExistOBJ->isEmpty())
+    		{
+    			$userExistOBJ=$userExistOBJ->first();
+    			$price="";
+    			$vehicleOBJ=Vehicle::where('vehicle_no','=',$request->input('vehicle_no'))->get();
+    			if(!$vehicleOBJ->isEmpty())
+    			{
+    				$vehicleOBJ=$vehicleOBJ->first();
+    				$tollOBJ=TollDetail::where('id','=',$request->input('toll_id'))->get();
+    				if(!$tollOBJ->isEmpty())
+    				{
+    					$tollOBJ=$tollOBJ->first();
+
+    					$userTollTxnOBJ= new UserTollTxn;
+    					if($userExistOBJ->wallet_amt>0)
+    					{
+    						DB::beginTransaction();
+    						if($vehicleOBJ->vehicle_type=="car_jeep_van"){
+			                    $price=$tollOBJ->car_jeep_van_price;
+			                    $userTollTxnOBJ->vehicle_type="car_jeep_van";
+			                }elseif ($vehicleOBJ->vehicle_type=="bus_truck") {
+			                    $price=$tollOBJ->bus_truck_price;
+			                    $userTollTxnOBJ->vehicle_type="bus_truck";
+			                }elseif ($vehicleOBJ->vehicle_type=="lcv") {
+			                    $price=$tollOBJ->lcv_price;
+			                    $userTollTxnOBJ->vehicle_type="lcv";
+			                }elseif ($vehicleOBJ->vehicle_type=="upto_3_axle_vehicle") {
+			                    $price=$tollOBJ->upto_3_axle_vehicle_price;
+			                    $userTollTxnOBJ->vehicle_type="upto_3_axle_vehicle";
+			                }elseif ($vehicleOBJ->vehicle_type=="axle_4_to_6_vehicle") {
+			                    $price=$tollOBJ->axle_4_to_6_vehicle_price;
+			                    $userTollTxnOBJ->vehicle_type="axle_4_to_6_vehicle";
+			                }elseif ($vehicleOBJ->vehicle_type=="axle_7_or_more_vehicle") {
+			                    $price=$tollOBJ->axle_7_or_more_vehicle_price;
+			                    $userTollTxnOBJ->vehicle_type="axle_7_or_more_vehicle";
+			                }elseif ($vehicleOBJ->vehicle_type=="hcm_eme") {
+			                    $price=$tollOBJ->hcm_eme_price;              
+			                    $userTollTxnOBJ->vehicle_type="hcm_eme";  
+			                }
+			                $userTollTxnOBJ->user_id=$request->input('user_id');
+			                $userTollTxnOBJ->vehicle_no=$request->input('vehicle_no');
+			                $userTollTxnOBJ->toll_amount=$price;
+			                $userExistOBJ->wallet_amt-=$price;
+			                $userTollTxnOBJ->wallet_id=$userExistOBJ->wallet_id;
+			                User::where('id','=',$request->input('user_id'))->update(['wallet_amt'=>$userExistOBJ->wallet_amt]);
+			                $userTollTxnOBJ->toll_id=$request->input('toll_id');
+			                txn:{
+			                        $txnId = $this->getRandomString(7);
+			                        $txnIdCon="TNX".$txnId."";
+			                        $txnIdExist = UserTollTxn::where('wallet_id','=',$txnIdCon)->get();
+			                        if($txnIdExist->isEmpty())
+			                        {
+			                            $userTollTxnOBJ->txn_id=$txnIdCon;     
+			                        }else
+			                        {
+			                            goto txn;
+			                        }
+		                    	}
+		                    $userTollTxnOBJ->json_data=json_encode($request->input());
+		                    try{
+		                    	$userTollTxnOBJ->save();
+		                    	DB::commit();
+		                    	$response=[
+		                    		'status'=>200,
+		                    		'message'=>'txn is successfully completed.'
+		                    	];
+		                    }catch(\Excpetion $e)
+		                    {
+		                    	//return to client
+		                    	DB::rollback();
+		                    	$respons=[
+		                    		'status'=>501,
+		                    		'message'=>'Oops!! something went wrong please try again later.'
+		                    	];
+		                    }
+
+    					}else
+    					{
+    						//return to client
+    						$response=[
+    							'status'=>501,
+    							'message'=>'insufficient balance in wallet.'
+    						];
+    					}
+
+    					
+    				}else
+    				{
+    					//return to client
+    					$response=[
+    						'status'=>501,
+    						'message'=>'toll does not exist.'
+    					];
+    				}
+    			}else
+    			{
+    				//return to client
+    				$response =[
+    					'status'=>501,
+    					'message'=>'vehicle no. does not exist.'
+    				];
+    			}
+
+    		}else
+    		{
+    			//return to client
+    			$response = [
+    				"status" => 501,
+    				"message" => "user does not exist"
     			];
     		}
     	}

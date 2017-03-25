@@ -18,6 +18,7 @@ class CreateUsersTable extends Migration
             $table->string('email')->unique()->nullable();
             $table->string('password')->comment('login password');
             $table->string('contact_no');
+            $table->string('wallet_id')->unique()->nullable();
             $table->decimal('wallet_amt',15,2)->default('0.00')->comment('balance amount in wallet');
             $table->bigInteger('usergroup_id')->unsigned();
             $table->enum('is_active',['0','1'])->comment('1 for active users');
