@@ -99,6 +99,7 @@ class TxnManagementController extends Controller
     	//setting validation rules
     	$validation=Validator::make($request->toArray(),[
     		'user_id'=>'required',
+            'wallet_id' => 'required',
     		'vehicle_no'=>'required',
     		'toll_id'=>'required',
     		]);
@@ -113,7 +114,7 @@ class TxnManagementController extends Controller
     	}else
     	{
     		
-    		$userExistOBJ=User::where('id','=',$request->input('user_id'))->where('usergroup_id','=','2')->where('is_active','=',1)->get();
+    		$userExistOBJ=User::where('id','=',$request->input('user_id'))->where('wallet_id','=',$request->input('wallet_id'))->where('usergroup_id','=','2')->where('is_active','=',1)->get();
     		if(!$userExistOBJ->isEmpty())
     		{
     			$userExistOBJ=$userExistOBJ->first();
