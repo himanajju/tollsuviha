@@ -16,4 +16,10 @@ class User extends Model
     {
         return $this->hasMany('App\TollUser','user_id');
     }
+
+
+    public function userDevice()
+    {
+        return $this->hasMany('App\UserDevice','user_id');
+    }
 }

@@ -8,14 +8,17 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use App\User;
+use DB;
 use App\Usergroup;
+use App\UserDevice;
 
 class AuthorizationController extends Controller
 {
     public function login(Request $request){
         $validation = Validator::make($request->toArray(),[ 
             'email' => 'required',
-            'password' => 'required'
+            'password' => 'required',
+            'device_id' => 'required'
         ]);
 
         if($validation->fails()){
@@ -39,8 +42,10 @@ class AuthorizationController extends Controller
                                           'name' => $resultSet->name,
                                           'email' => $resultSet->email,
                                           'contact_no' => $resultSet->contact_no,
+                                          'usergroup' => $resultSet->usergroup()->first()->group_title,
                                           'email' => $resultSet->email,
                                           'created_at' => $resultSet->created_at,
+                                          'device_id' => $resultSet->userDevice()->first()->device_id,
                                           'wallet_amt' => $resultSet->wallet_amt);
 
                     // return to client
@@ -80,7 +85,8 @@ class AuthorizationController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|min:6',
-            'contact_no' => 'required|digits:10'
+            'contact_no' => 'required|digits:10',
+            'device_id' => 'required'
         ]);
 
         if($validation->fails()){
@@ -92,6 +98,8 @@ class AuthorizationController extends Controller
             //Getting usergroup
             $usergroupOBJ = Usergroup::where('id', '=', '2')->get();
             if(!$usergroupOBJ->isEmpty()){
+                DB::beginTransaction();
+                
                 $usergroupOBJ = $usergroupOBJ->first();            
                 $newUserOBJ = new User;
                 $newUserOBJ->usergroup()->associate($usergroupOBJ);
@@ -118,11 +126,21 @@ class AuthorizationController extends Controller
                 try{
                     //saving user detail
                     $newUserOBJ->save();
+
+                    $userDeviceOBJ = new UserDevice();
+                    $userDeviceOBJ->user()->associate($newUserOBJ);
+                    $userDeviceOBJ->device_id = $request->input('device_id');
+                    $userDeviceOBJ->save();
+
+                    DB::commit();
+
                     // return to client
                     $response = ['status' => 200,
                                  'message'   => 'Registration Successfull.',
-                                 'data' => array('id'=>$newUserOBJ->id, 'email' => $newUserOBJ->email, 'wallet_id' => $newUserOBJ->wallet_id, 'wallet_amount' => $newUserOBJ->wallet_amt, 'contact_no' => $newUserOBJ->contact_no, 'created_at' => $resultSet->created_at)];
+                                 'data' => array('id'=>$newUserOBJ->id, 'email' => $newUserOBJ->email, 'wallet_id' => $newUserOBJ->wallet_id, 'wallet_amount' => $newUserOBJ->wallet_amt, 'contact_no' => $newUserOBJ->contact_no, 'created_at' => $newUserOBJ->created_at, 'device_id' => $userDeviceOBJ->device_id)];
                 }catch(\Exception $e){
+                    DB::rollback();
+
                     // return to client
                     $response = ['status' => 501,
                                  'message'   => 'Oops!! something went wrong please try again later.'];
