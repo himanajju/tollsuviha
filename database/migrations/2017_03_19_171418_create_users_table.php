@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->decimal('wallet_amt',15,2)->default('0.00')->comment('balance amount in wallet');
             $table->bigInteger('usergroup_id')->unsigned();
             $table->enum('is_active',['0','1'])->comment('1 for active users');
+            $table->enum('is_blocked',['0','1'])->default('0')->comment('1 for blocked users');
             $table->foreign('usergroup_id')
                   ->references('id')
                   ->on('usergroups');
