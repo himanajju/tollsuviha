@@ -101,7 +101,7 @@ class TxnManagementController extends Controller
     		'user_id'=>'required',
             'wallet_id' => 'required',
     		'vehicle_no'=>'required',
-    		'toll_id'=>'required',
+    		'toll_id'=>'required'
     		]);
     	if($validation->fails())
     	{

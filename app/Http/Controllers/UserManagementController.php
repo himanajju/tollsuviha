@@ -244,7 +244,7 @@ class UserManagementController extends Controller
     public function getAlltolldetailsOBJ()
     {
         //getting toll details
-        $tollOBJ=TollDetail::all(['toll_id','toll_name','city','state','latitude','longitude','car_jeep_van_price','lcv_price','bus_truck_price','upto_3_axle_vehicle_price','axle_4_to_6_vehicle_price','axle_7_or_more_vehicle_price','hcm_eme_price','highway']);
+        $tollOBJ=TollDetail::all(['id','toll_id','toll_name','city','state','latitude','longitude','car_jeep_van_price','lcv_price','bus_truck_price','upto_3_axle_vehicle_price','axle_4_to_6_vehicle_price','axle_7_or_more_vehicle_price','hcm_eme_price','highway']);
         $response=['status'=>200,
             'message'=>'all toll details have Successfully fetched.',
             'data'=>$tollOBJ

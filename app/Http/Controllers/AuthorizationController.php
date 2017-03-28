@@ -39,7 +39,6 @@ class AuthorizationController extends Controller
                                           'name' => $resultSet->name,
                                           'email' => $resultSet->email,
                                           'contact_no' => $resultSet->contact_no,
-                                          'usergroup' => $resultSet->usergroup,
                                           'email' => $resultSet->email,
                                           'created_at' => $resultSet->created_at,
                                           'wallet_amt' => $resultSet->wallet_amt);
@@ -121,7 +120,8 @@ class AuthorizationController extends Controller
                     $newUserOBJ->save();
                     // return to client
                     $response = ['status' => 200,
-                                 'message'   => 'Registration Successfull.'];
+                                 'message'   => 'Registration Successfull.',
+                                 'data' => array('id'=>$newUserOBJ->id, 'email' => $newUserOBJ->email, 'wallet_id' => $newUserOBJ->wallet_id, 'wallet_amount' => $newUserOBJ->wallet_amt, 'contact_no' => $newUserOBJ->contact_no, 'created_at' => $resultSet->created_at)];
                 }catch(\Exception $e){
                     // return to client
                     $response = ['status' => 501,
