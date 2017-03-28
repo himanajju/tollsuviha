@@ -255,6 +255,79 @@ class UserManagementController extends Controller
         
     }
 
+
+    //function for blocking users
+    public function blockUser($userId)
+    {
+        $userOBJ=User::where('id','=',$userId)->where('is_active','=',1)->get();
+        if(!$userOBJ->isEmpty())
+        {
+            $userOBJ=$userOBJ->first();
+            if($userOBJ->is_blocked==0)
+            {
+
+               try{
+                    User::where('id','=',$userId)->update(['is_blocked'=>1]);
+                    $response=[
+                        'status'=>200,
+                        'message'=>'user is blocked Successfully.'
+                    ];
+                }catch(\Exception $e)
+                {
+                    //retuen to client
+                    $response=[
+                        'status'=>501,
+                        'message'=>'Oops!! something went wrong please try again later.'
+                    ];
+                }
+            }else
+            {
+                //retuen to client
+                    $response=[
+                        'status'=>501,
+                        'message'=>'user is alredy blocked.'
+                    ];
+            }
+
+        }
+        else
+        {
+            //return to client
+            $response=[
+                    'status'=>501,
+                    'message'=>'user does not exist or is not active.'
+                ];
+        }
+
+        return response()->json($response);
+        exit;
+    }
+
+
+    //function for getting all users details
+    public function getAllUsers($userId)
+    {
+        $userOBJ=User::where('id','=',$userId)->where('is_active','=',1)->whereIn('usergroup_id',[1,4])->get();
+        if(!$userOBJ->isEmpty())
+        {
+            $allUserOBJ=User::whereNotIn('usergroup_id',[1,4])->get();
+            //return to client
+            $response=[
+            'status'=>200,
+            'message'=>'all users details fetched Successfully.',
+            'data'=>$allUserOBJ
+            ];
+        }else{
+            //return to client
+            $response=[
+                'status'=>501,
+                'message'=>'user is not admin or manager.'
+            ];
+        }
+        return response()->json($response);
+        exit;
+    }
+
     //function for inserting VIP_users
     public function addVIPusers(Request $request)
     {

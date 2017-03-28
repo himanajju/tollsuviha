@@ -24,8 +24,13 @@ Route::group(['prefix' => 'api'], function () {
     Route::group(['prefix' => 'users'], function () {
     	Route::post('/add', 'UserManagementController@addUser');
     	Route::get('/{id}', 'UserManagementController@getUserDetails');
-    	Route::post('/update','UserManagementController@userUpdate');
+        Route::post('/update','UserManagementController@userUpdate');
     	Route::get('/pay-history/{userId}','TxnManagementController@payHistory');
+
+    });
+    Route::group(['prefix'=>'admin'],function(){
+        Route::get('/block/{id}', 'UserManagementController@blockUser');
+        Route::get('/get-all-users/{adminId}','UserManagementController@getAllUsers');
     });
 
     Route::group(['prefix'=>'toll'],function(){
