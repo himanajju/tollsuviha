@@ -26,10 +26,12 @@ Route::group(['prefix' => 'api'], function () {
     	Route::get('/{id}', 'UserManagementController@getUserDetails');
         Route::post('/update','UserManagementController@userUpdate');
     	Route::get('/pay-history/{userId}','TxnManagementController@payHistory');
+        Route::post('/change-password','UserManagementController@chnagePassword');
 
     });
     Route::group(['prefix'=>'admin'],function(){
-        Route::get('/block/{id}', 'UserManagementController@blockUser');
+        Route::get('/block/{userId}/{adminId}', 'UserManagementController@blockUser');
+        Route::get('/unblock/{userId}/{adminId}', 'UserManagementController@unblockUser');
         Route::get('/get-all-users/{adminId}','UserManagementController@getAllUsers');
     });
 
