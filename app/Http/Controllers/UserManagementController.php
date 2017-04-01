@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -257,12 +256,12 @@ class UserManagementController extends Controller
 
 
     //function for blocking users
-    public function blockUser($userId,$adminId)
+    public function blockUser($userEmail,$contactNo,$adminId)
     {
         $isAdminId=User::where('id','=',$adminId)->where('is_active','=',1)->where('usergroup_id','=',1)->get();
         if(!$isAdminId->isEmpty())
         {
-                $userOBJ=User::where('id','=',$userId)->where('is_active','=',1)->get();
+                $userOBJ=User::where('email','=',$userEmail)->where('contact_no','=',$contactNo)->where('is_active','=',1)->get();
                 if(!$userOBJ->isEmpty())
                 {
                     $userOBJ=$userOBJ->first();
@@ -270,7 +269,7 @@ class UserManagementController extends Controller
                     {
 
                        try{
-                            User::where('id','=',$userId)->update(['is_blocked'=>1,'update_by'=>$adminId]);
+                            User::where('email','=',$userEmail)->update(['is_blocked'=>1,'update_by'=>$adminId]);
                             $response=[
                                 'status'=>200,
                                 'message'=>'user is blocked Successfully.'
@@ -314,12 +313,12 @@ class UserManagementController extends Controller
     }
 
 //function for unblocking users
-    public function unblockUser($userId,$adminId)
+    public function unblockUser($userEmail,$contactNo,$adminId)
     {
         $isAdminId=User::where('id','=',$adminId)->where('is_active','=',1)->where('usergroup_id','=',1)->get();
         if(!$isAdminId->isEmpty())
         {
-                $userOBJ=User::where('id','=',$userId)->where('is_active','=',1)->get();
+                $userOBJ=User::where('email','=',$userEmail)->where('contact_no','=',$contactNo)->where('is_active','=',1)->get();
                 if(!$userOBJ->isEmpty())
                 {
                     $userOBJ=$userOBJ->first();
@@ -327,7 +326,7 @@ class UserManagementController extends Controller
                     {
 
                        try{
-                            User::where('id','=',$userId)->update(['is_blocked'=>0,'update_by'=>$adminId]);
+                            User::where('email','=',$userEmail)->update(['is_blocked'=>0,'update_by'=>$adminId]);
                             $response=[
                                 'status'=>200,
                                 'message'=>'user is unblocked Successfully.'
@@ -549,6 +548,27 @@ class UserManagementController extends Controller
         }
         return response()->json($response);
         exit;
+    }
+
+    //function for toll list in between to stations
+    public function tollList(Request $request)
+    {
+        $validation=validator::make($request->toArray(),[
+                'source'=>'required',
+                'destination'=>'required'
+            ]);
+        if($validation->fails())
+        {
+            //return to client
+            $response=[
+                'status'=>500,
+                'message'=>'validation errors',
+                'errors'=>$validation->errors()
+            ];
+        }else
+        {
+            
+        }
     }
 
 }

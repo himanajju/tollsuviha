@@ -1,0 +1,358 @@
+<?php
+
+use Illuminate\Database\Seeder;
+
+class TollDetailsTableSeeder extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('toll_details')->insert([
+        		'id'=>'1',
+        		'toll_id'=>'toll_1',
+        		'toll_name'=>'kharun',
+        		'city'=>'raipur',
+        		'state'=>'chhattisgarh',
+        		'latitude'=>'11111',
+        		'longitude'=>'11111',
+        		'car_jeep_van_price'=>'24',
+        		'lcv_price'=>'40',
+        		'bus_truck_price'=>'81',
+        		'upto_3_axle_vehicle_price'=>'177',
+        		'axle_4_to_6_vehicle_price'=>'177',
+        		'axle_7_or_more_vehicle_price'=>'177',
+        		'hcm_eme_price'=>'177',
+        		'highway'=>'1',
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+       DB::table('toll_details')->insert([
+        		'id'=>'2',
+        		'toll_id'=>'toll_2',
+        		'toll_name'=>'kosa nala',
+        		'city'=>'khumahri',
+        		'state'=>'chhattisgarh',
+        		'latitude'=>'11112',
+        		'longitude'=>'11112',
+        		'car_jeep_van_price'=>'24',
+        		'lcv_price'=>'40',
+        		'bus_truck_price'=>'81',
+        		'upto_3_axle_vehicle_price'=>'177',
+        		'axle_4_to_6_vehicle_price'=>'177',
+        		'axle_7_or_more_vehicle_price'=>'177',
+        		'hcm_eme_price'=>'177',
+        		'highway'=>'1',
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+       DB::table('toll_details')->insert([
+        		'id'=>3,
+        		'toll_id'=>'toll_3',
+        		'toll_name'=>'durg by pass',
+        		'city'=>'bhilai',
+        		'state'=>'chhattisgarh',
+        		'latitude'=>'11113',
+        		'longitude'=>'11113',
+        		'car_jeep_van_price'=>55,
+        		'lcv_price'=>115,
+        		'bus_truck_price'=>170,
+        		'upto_3_axle_vehicle_price'=>170,
+        		'axle_4_to_6_vehicle_price'=>170,
+        		'axle_7_or_more_vehicle_price'=>170,
+        		'hcm_eme_price'=>340,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]); 
+       	DB::table('toll_details')->insert([
+        		'id'=>4,
+        		'toll_id'=>'toll_4',
+        		'toll_name'=>'Thakurtola (End of Durg Bypass)',
+        		'city'=>'durg',
+        		'state'=>'chhattisgarh',
+        		'latitude'=>'11114',
+        		'longitude'=>'11114',
+        		'car_jeep_van_price'=>83,
+        		'lcv_price'=>146,
+        		'bus_truck_price'=>291,
+        		'upto_3_axle_vehicle_price'=>468,
+        		'axle_4_to_6_vehicle_price'=>468,
+        		'axle_7_or_more_vehicle_price'=>468,
+        		'hcm_eme_price'=>468,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+       	DB::table('toll_details')->insert([
+        		'id'=>5,
+        		'toll_id'=>'toll_5',
+        		'toll_name'=>'sendurwafa',
+        		'city'=>'gondia',
+        		'state'=>'maharashtra',
+        		'latitude'=>'11115',
+        		'longitude'=>'11115',
+        		'car_jeep_van_price'=>73,
+        		'lcv_price'=>127,
+        		'bus_truck_price'=>254,
+        		'upto_3_axle_vehicle_price'=>408,
+        		'axle_4_to_6_vehicle_price'=>408,
+        		'axle_7_or_more_vehicle_price'=>408,
+        		'hcm_eme_price'=>408,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+       		DB::table('toll_details')->insert([
+        		'id'=>6,
+        		'toll_id'=>'toll_6',
+        		'toll_name'=>'kardha',
+        		'city'=>'gondia',
+        		'state'=>'maharashtra',
+        		'latitude'=>'11116',
+        		'longitude'=>'11116',
+        		'car_jeep_van_price'=>21,
+        		'lcv_price'=>21,
+        		'bus_truck_price'=>106,
+        		'upto_3_axle_vehicle_price'=>169,
+        		'axle_4_to_6_vehicle_price'=>169,
+        		'axle_7_or_more_vehicle_price'=>169,
+        		'hcm_eme_price'=>169,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+        	DB::table('toll_details')->insert([
+        		'id'=>7,
+        		'toll_id'=>'toll_7',
+        		'toll_name'=>'WEPL mathani',
+        		'city'=>'nagpur',
+        		'state'=>'maharashtra',
+        		'latitude'=>'11117',
+        		'longitude'=>'11117',
+        		'car_jeep_van_price'=>45,
+        		'lcv_price'=>75,
+        		'bus_truck_price'=>155,
+        		'upto_3_axle_vehicle_price'=>170,
+        		'axle_4_to_6_vehicle_price'=>245,
+        		'axle_7_or_more_vehicle_price'=>300,
+        		'hcm_eme_price'=>300,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+
+        	DB::table('toll_details')->insert([
+        		'id'=>8,
+        		'toll_id'=>'toll_8',
+        		'toll_name'=>'Pattansawang',
+        		'city'=>'nagpur',
+        		'state'=>'maharashtra',
+        		'latitude'=>'22221',
+        		'longitude'=>'22221',
+        		'car_jeep_van_price'=>75,
+        		'lcv_price'=>120,
+        		'bus_truck_price'=>245,
+        		'upto_3_axle_vehicle_price'=>270,
+        		'axle_4_to_6_vehicle_price'=>385,
+        		'axle_7_or_more_vehicle_price'=>470,
+        		'hcm_eme_price'=>385,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+        	DB::table('toll_details')->insert([
+        		'id'=>9,
+        		'toll_id'=>'toll_9',
+        		'toll_name'=>'Kelwad',
+        		'city'=>'Madhya Pradesh',
+        		'state'=>'Madhya Pradesh',
+        		'latitude'=>'22222',
+        		'longitude'=>'22222',
+        		'car_jeep_van_price'=>60,
+        		'lcv_price'=>95,
+        		'bus_truck_price'=>195,
+        		'upto_3_axle_vehicle_price'=>215,
+        		'axle_4_to_6_vehicle_price'=>310,
+        		'axle_7_or_more_vehicle_price'=>375,
+        		'hcm_eme_price'=>310,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+        	DB::table('toll_details')->insert([
+        		'id'=>10,
+        		'toll_id'=>'toll_10',
+        		'toll_name'=>'jungawani',
+        		'city'=>'Madhya Pradesh',
+        		'state'=>'Madhya Pradesh',
+        		'latitude'=>'22223',
+        		'longitude'=>'22223',
+        		'car_jeep_van_price'=>65,
+        		'lcv_price'=>105,
+        		'bus_truck_price'=>215,
+        		'upto_3_axle_vehicle_price'=>235,
+        		'axle_4_to_6_vehicle_price'=>340,
+        		'axle_7_or_more_vehicle_price'=>415,
+        		'hcm_eme_price'=>340,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+        	DB::table('toll_details')->insert([
+        		'id'=>11,
+        		'toll_id'=>'toll_11',
+        		'toll_name'=>'Titarpani',
+        		'city'=>'Madhya Pradesh',
+        		'state'=>'Madhya Pradesh',
+        		'latitude'=>'22224',
+        		'longitude'=>'22224',
+        		'car_jeep_van_price'=>80,
+        		'lcv_price'=>130,
+        		'bus_truck_price'=>270,
+        		'upto_3_axle_vehicle_price'=>290,
+        		'axle_4_to_6_vehicle_price'=>420,
+        		'axle_7_or_more_vehicle_price'=>510,
+        		'hcm_eme_price'=>420,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+        	DB::table('toll_details')->insert([
+        		'id'=>12,
+        		'toll_id'=>'toll_12',
+        		'toll_name'=>'Chitora',
+        		'city'=>'Madhya Pradesh',
+        		'state'=>'Madhya Pradesh',
+        		'latitude'=>'22225',
+        		'longitude'=>'22225',
+        		'car_jeep_van_price'=>100,
+        		'lcv_price'=>160,
+        		'bus_truck_price'=>340,
+        		'upto_3_axle_vehicle_price'=>370,
+        		'axle_4_to_6_vehicle_price'=>535,
+        		'axle_7_or_more_vehicle_price'=>650,
+        		'hcm_eme_price'=>535,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+        	DB::table('toll_details')->insert([
+        		'id'=>13,
+        		'toll_id'=>'toll_13',
+        		'toll_name'=>'Malthone',
+        		'city'=>'Madhya Pradesh',
+        		'state'=>'Madhya Pradesh',
+        		'latitude'=>'22226',
+        		'longitude'=>'22226',
+        		'car_jeep_van_price'=>85,
+        		'lcv_price'=>140,
+        		'bus_truck_price'=>295,
+        		'upto_3_axle_vehicle_price'=>320,
+        		'axle_4_to_6_vehicle_price'=>460,
+        		'axle_7_or_more_vehicle_price'=>560,
+        		'hcm_eme_price'=>460,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+            DB::table('toll_details')->insert([
+        		'id'=>14,
+        		'toll_id'=>'toll_14',
+        		'toll_name'=>'Vighaket',
+        		'city'=>'Madhya Pradesh',
+        		'state'=>'Madhya Pradesh',
+        		'latitude'=>'22227',
+        		'longitude'=>'22227',
+        		'car_jeep_van_price'=>60,
+        		'lcv_price'=>100,
+        		'bus_truck_price'=>205,
+        		'upto_3_axle_vehicle_price'=>225,
+        		'axle_4_to_6_vehicle_price'=>325,
+        		'axle_7_or_more_vehicle_price'=>395,
+        		'hcm_eme_price'=>325,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+        	DB::table('toll_details')->insert([
+        		'id'=>15,
+        		'toll_id'=>'toll_15',
+        		'toll_name'=>'Babina',
+        		'city'=>'Uttar Pradesh',
+        		'state'=>'Uttar Pradesh',
+        		'latitude'=>'22228',
+        		'longitude'=>'22228',
+        		'car_jeep_van_price'=>85,
+        		'lcv_price'=>135,
+        		'bus_truck_price'=>280,
+        		'upto_3_axle_vehicle_price'=>305,
+        		'axle_4_to_6_vehicle_price'=>440,
+        		'axle_7_or_more_vehicle_price'=>535,
+        		'hcm_eme_price'=>404,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+        	DB::table('toll_details')->insert([
+        		'id'=>16,
+        		'toll_id'=>'toll_16',
+        		'toll_name'=>'Gwalior Bypass (Mehra)',
+        		'city'=>'Madhya Pradesh',
+        		'state'=>'Madhya Pradesh',
+        		'latitude'=>'22229',
+        		'longitude'=>'22229',
+        		'car_jeep_van_price'=>70,
+        		'lcv_price'=>110,
+        		'bus_truck_price'=>230,
+        		'upto_3_axle_vehicle_price'=>250,
+        		'axle_4_to_6_vehicle_price'=>360,
+        		'axle_7_or_more_vehicle_price'=>440,
+        		'hcm_eme_price'=>360,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+                DB::table('toll_details')->insert([
+        		'id'=>17,
+        		'toll_id'=>'toll_17',
+        		'toll_name'=>'Choundha',
+        		'city'=>'Madhya Pradesh',
+        		'state'=>'Madhya Pradesh',
+        		'latitude'=>'222210',
+        		'longitude'=>'222210',
+        		'car_jeep_van_price'=>50,
+        		'lcv_price'=>90,
+        		'bus_truck_price'=>195,
+        		'upto_3_axle_vehicle_price'=>200,
+        		'axle_4_to_6_vehicle_price'=>315,
+        		'axle_7_or_more_vehicle_price'=>380,
+        		'hcm_eme_price'=>315,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+                DB::table('toll_details')->insert([
+        		'id'=>18,
+        		'toll_id'=>'toll_18',
+        		'toll_name'=>'Jajau (Old Baretha)',
+        		'city'=>'Madhya Pradesh',
+        		'state'=>'Madhya Pradesh',
+        		'latitude'=>'222211',
+        		'longitude'=>'222211',
+        		'car_jeep_van_price'=>60,
+        		'lcv_price'=>105,
+        		'bus_truck_price'=>225,
+        		'upto_3_axle_vehicle_price'=>235,
+        		'axle_4_to_6_vehicle_price'=>355,
+        		'axle_7_or_more_vehicle_price'=>430,
+        		'hcm_eme_price'=>355,
+        		'highway'=>1,
+        		'created_at' => '2017-03-18 00:00:00',
+                'updated_at' => '2017-03-18 00:00:00'
+        	]);
+    }
+}

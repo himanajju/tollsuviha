@@ -30,8 +30,8 @@ Route::group(['prefix' => 'api'], function () {
 
     });
     Route::group(['prefix'=>'admin'],function(){
-        Route::get('/block/{userId}/{adminId}', 'UserManagementController@blockUser');
-        Route::get('/unblock/{userId}/{adminId}', 'UserManagementController@unblockUser');
+        Route::get('/block/{userEmail}/{contactNo}/{adminId}', 'UserManagementController@blockUser');
+        Route::get('/unblock/{userEmail}/{contactNo}/{adminId}', 'UserManagementController@unblockUser');
         Route::get('/get-all-users/{adminId}','UserManagementController@getAllUsers');
     });
 

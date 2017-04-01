@@ -10,7 +10,8 @@ class DatabaseSeeder extends Seeder
     private $tables = array(
         'usergroups',
         'users',
-        'vehicles'
+        'vehicles',
+        'toll_details'
     );
     /**
      * Run the database seeds.
@@ -24,6 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call(UsergroupsTableSeeder::class);
         $this->call(UsersTableSeeder::class);
         $this->call(VehiclesTableSeeder::class);
+        $this->call(TollDetailsTableSeeder::class);
     }
 
     
