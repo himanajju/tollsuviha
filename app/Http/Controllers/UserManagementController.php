@@ -257,51 +257,119 @@ class UserManagementController extends Controller
 
 
     //function for blocking users
-    public function blockUser($userId)
+    public function blockUser($userId,$adminId)
     {
-        $userOBJ=User::where('id','=',$userId)->where('is_active','=',1)->get();
-        if(!$userOBJ->isEmpty())
+        $isAdminId=User::where('id','=',$adminId)->where('is_active','=',1)->where('usergroup_id','=',1)->get();
+        if(!$isAdminId->isEmpty())
         {
-            $userOBJ=$userOBJ->first();
-            if($userOBJ->is_blocked==0)
-            {
-
-               try{
-                    User::where('id','=',$userId)->update(['is_blocked'=>1]);
-                    $response=[
-                        'status'=>200,
-                        'message'=>'user is blocked Successfully.'
-                    ];
-                }catch(\Exception $e)
+                $userOBJ=User::where('id','=',$userId)->where('is_active','=',1)->get();
+                if(!$userOBJ->isEmpty())
                 {
-                    //retuen to client
-                    $response=[
-                        'status'=>501,
-                        'message'=>'Oops!! something went wrong please try again later.'
-                    ];
-                }
-            }else
-            {
-                //retuen to client
-                    $response=[
-                        'status'=>501,
-                        'message'=>'user is alredy blocked.'
-                    ];
-            }
+                    $userOBJ=$userOBJ->first();
+                    if($userOBJ->is_blocked==0)
+                    {
 
-        }
-        else
+                       try{
+                            User::where('id','=',$userId)->update(['is_blocked'=>1,'update_by'=>$adminId]);
+                            $response=[
+                                'status'=>200,
+                                'message'=>'user is blocked Successfully.'
+                            ];
+                        }catch(\Exception $e)
+                        {
+                            //retuen to client
+                            $response=[
+                                'status'=>501,
+                                'message'=>'Oops!! something went wrong please try again later.'
+                            ];
+                        }
+                    }else
+                    {
+                        //retuen to client
+                            $response=[
+                                'status'=>501,
+                                'message'=>'user is alredy blocked.'
+                            ];
+                    }
+
+                }
+                else
+                {
+                    //return to client
+                    $response=[
+                            'status'=>501,
+                            'message'=>'user does not exist or is not active.'
+                        ];
+                }
+        }else
         {
             //return to client
-            $response=[
-                    'status'=>501,
-                    'message'=>'user does not exist or is not active.'
-                ];
+                $response=[
+                        'status'=>501,
+                        'message'=>'user is not admin.'
+                    ];
         }
-
         return response()->json($response);
         exit;
     }
+
+//function for unblocking users
+    public function unblockUser($userId,$adminId)
+    {
+        $isAdminId=User::where('id','=',$adminId)->where('is_active','=',1)->where('usergroup_id','=',1)->get();
+        if(!$isAdminId->isEmpty())
+        {
+                $userOBJ=User::where('id','=',$userId)->where('is_active','=',1)->get();
+                if(!$userOBJ->isEmpty())
+                {
+                    $userOBJ=$userOBJ->first();
+                    if($userOBJ->is_blocked==1)
+                    {
+
+                       try{
+                            User::where('id','=',$userId)->update(['is_blocked'=>0,'update_by'=>$adminId]);
+                            $response=[
+                                'status'=>200,
+                                'message'=>'user is unblocked Successfully.'
+                            ];
+                        }catch(\Exception $e)
+                        {
+                            //retuen to client
+                            $response=[
+                                'status'=>501,
+                                'message'=>'Oops!! something went wrong please try again later.'
+                            ];
+                        }
+                    }else
+                    {
+                        //retuen to client
+                            $response=[
+                                'status'=>501,
+                                'message'=>'user is alredy unblocked.'
+                            ];
+                    }
+
+                }
+                else
+                {
+                    //return to client
+                    $response=[
+                            'status'=>501,
+                            'message'=>'user does not exist or is not active.'
+                        ];
+                }
+        }else
+        {
+            //return to client
+                $response=[
+                        'status'=>501,
+                        'message'=>'user is not admin.'
+                    ];
+        }
+        return response()->json($response);
+        exit;
+    }
+
 
 
     //function for getting all users details
@@ -428,7 +496,60 @@ class UserManagementController extends Controller
     //     return
     // }
 
-    
+    //function for chnage password of user
+
+    public function chnagePassword(Request $request)
+    {
+        //setting validation 
+        $validation=Validator::make($request->toArray(),[
+            'user_id'=>'required',
+            'oldPassword'=>'required|min:6',
+            'newPassword'=>'required|min:6'
+            ]);
+        if($validation->fails())
+        {
+            //return to client
+            $response=[
+                'status'=>500,
+                'message'=>'validation errors.',
+                'errors'=>$validation->errors()
+            ];
+        }else
+        {
+            $userExistOBJ=User::where('id','=',$request->input('user_id'))->where('is_active','=',1)->where('is_blocked','=',0)->get();
+            if(!$userExistOBJ->isEmpty())
+            {
+                $userExistOBJ=$userExistOBJ->first();
+                if($userExistOBJ->password==$request->input('oldPassword'))
+                {
+                    User::where('id','=',$request->input('user_id'))->where('password','=',$request->input('oldPassword'))
+                    ->update(['password'=>$request->input('newPassword'),'update_by'=>$request->input('user_id')]);
+
+                    //return to client
+                    $response=[
+                        'status'=>200,
+                        'message'=>'password is Successfully updated.'
+                    ];
+                }else
+                {
+                    //return to client
+                    $response=[
+                        'status'=>501,
+                        'message'=>'old password is wrong.'
+                    ];
+                }
+            }else
+            {
+                //return to client
+                $response=[
+                    'status'=>501,
+                    'message'=>'user does not exist or is not active or blocked.'
+                ];
+            }
+        }
+        return response()->json($response);
+        exit;
+    }
 
 }
 
