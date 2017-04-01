@@ -25,7 +25,6 @@ class CreateTollDetailsTable extends Migration
             $table->decimal('bus_truck_price',10,2)->default('0.00')->comment('bus/truck price');
             $table->decimal('upto_3_axle_vehicle_price',10,2)->default('0.00')->comment('upto 3 axle vehicle price');
             $table->decimal('axle_4_to_6_vehicle_price',10,2)->default('0.00')->comment('4 to 6 axle vehicle price');
-            $table->decimal('axle_10_to_6_vehicle_price',10,2)->default('0.00')->comment('10 to 6 axle vehicle price');
             $table->decimal('axle_7_or_more_vehicle_price',10,2)->default('0.00')->comment('7 or more axle vechile price');
             $table->decimal('hcm_eme_price',10,2)->default('0.00')->comment('HCM/EME price');
             $table->enum('highway',['0','1'])->comment('states the type of toll plaza, 0 for National Highway');

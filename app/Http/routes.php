@@ -28,7 +28,7 @@ Route::group(['prefix' => 'api'], function () {
         Route::post('/update','UserManagementController@userUpdate');
     	Route::get('/pay-history/{userId}','TxnManagementController@payHistory');
         Route::post('/change-password','UserManagementController@chnagePassword');
-        Route::post('/toll-list','UserManagementController@tollList ');
+        Route::post('/toll-list','UserManagementController@tollList');
 
     });
     Route::group(['prefix'=>'admin'],function(){

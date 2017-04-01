@@ -153,7 +153,7 @@ class UserManagementController extends Controller
                     User::where('id',$request->input('id'))
                     ->update([
                         'name'=>$request->input('name'),
-                        'email'=>$request->input('email'),
+                        'email'=>$requestd->input('email'),
                         'password'=>$request->input('password'),
                         'contact_no'=>$request->input('contact_no')
                         ]);
@@ -198,7 +198,7 @@ class UserManagementController extends Controller
     //             'highway'=>'required|digits:1'
     //         ]);
     //         if($validation->fails()){
-    //             //validation errors
+    //             //validation  
     //             $response=['status'=>500,
     //                 'message'=>'validation failed',
     //                 'errors'=>$validation->errors()
@@ -437,7 +437,7 @@ class UserManagementController extends Controller
 
     public function getVechileDetails($vehicleNo,$userId,$tollId){
      //Getting user details
-        $userOBJ=User::where('id','=',$userId)->where('usergroup  _id','=',3)->where('is_active','=',1)->get();
+        $userOBJ=User::where('id','=',$userId)->where('usergroup_id','=',3)->where('is_active','=',1)->get();
         $price="";
         if(!$userOBJ->isEmpty()){
             $VehicleOBJ=Vehicle::where('vehicle_no','=',$vehicleNo)->get();
@@ -460,21 +460,21 @@ class UserManagementController extends Controller
                     $price=$tolldetailsOBJ->hcm_eme_price;                
                 }
                 $responseData=array(
-                    'vechile_no'=>$VehicleOBJ->vehicle_no,
+                    'vehicle_no'=>$VehicleOBJ->vehicle_no,
                     'vehicle_type'=>$VehicleOBJ->vehicle_type,
                     'amount'=>$price
                     );
                     //return to client
                 $response=[
                         'status'=>200,
-                        'message'=>'vechile data is fetched Successfully.',
+                        'message'=>'vehicle data is fetched Successfully.',
                         'data'=>$responseData
                 ];
 
             }else{
                 $response=[
                     'status'=>501,
-                    'message'=>'vechile not registrated.'
+                    'message'=>'vehicle not registrated.'
                 ];
             }
         }else{
@@ -576,7 +576,6 @@ class UserManagementController extends Controller
             $src=$request->input('source');
             $destination=$request->input('destination');
             $vehicle_type=$request->input('vehicle_type');
-
             $longitudeId=0;
             $totalPrice=0;
             $price=0;
@@ -592,7 +591,7 @@ class UserManagementController extends Controller
             if(!$tollListOBJ->isEmpty())
             {
                 $response=array('status'=>200,
-                                'message'=>'hello',
+                                'message'=>'list of toll are fetched Successfully.',
                                 'data'=>$tollListOBJ,
                                 'totalPrice'=>0);
 
@@ -616,9 +615,13 @@ class UserManagementController extends Controller
                     }
                     $totalPrice+=$price;
                 }
-                
-                // print_r($totalPrice);die;
                 $response['totalPrice']=$totalPrice;
+            }else
+            {
+                $response=[
+                    'status'=>501,
+                    'message'=>'Oops!! something went wrong please try again later.'
+                ];
             }
         }
         return response()->json($response);

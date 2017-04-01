@@ -96,7 +96,7 @@ class TxnManagementController extends Controller
     //toll payment txn
     public function tollPayment(Request $request)
     {
-        echo "dfs";die;
+       // echo "dfs";die;
     	//setting validation rules
     	$validation=Validator::make($request->toArray(),[
     		'user_id'=>'required',
@@ -116,11 +116,11 @@ class TxnManagementController extends Controller
     	{
     		
     		$userExistOBJ=User::where('id','=',$request->input('user_id'))->where('wallet_id','=',$request->input('wallet_id'))->where('usergroup_id','=','2')->where('is_active','=',1)->get();
-            print_r($userExistOBJ);die;
+           // print_r($userExistOBJ);die;
     		if(!$userExistOBJ->isEmpty())
     		{
-    			$userExistOBJ=$userExistOBJ->first();
-    			$price="";
+                $userExistOBJ=$userExistOBJ->first();
+    			$price=0;
     			$vehicleOBJ=Vehicle::where('vehicle_no','=',$request->input('vehicle_no'))->get();
     			if(!$vehicleOBJ->isEmpty())
     			{
@@ -156,51 +156,64 @@ class TxnManagementController extends Controller
 			                    $price=$tollOBJ->hcm_eme_price;              
 			                    $userTollTxnOBJ->vehicle_type="hcm_eme";  
 			                }
-			                $userTollTxnOBJ->user_id=$request->input('user_id');
-			                $userTollTxnOBJ->vehicle_no=$request->input('vehicle_no');
-			                $userTollTxnOBJ->toll_amount=$price;
-			                $userExistOBJ->wallet_amt-=$price;
-			                $userTollTxnOBJ->wallet_id=$userExistOBJ->wallet_id;
-			                User::where('id','=',$request->input('user_id'))->update(['wallet_amt'=>$userExistOBJ->wallet_amt]);
-			                $userTollTxnOBJ->toll_id=$request->input('toll_id');
-			                txn:{
-			                        $txnId = $this->getRandomString(7);
-			                        $txnIdCon="TNX".$txnId."";
-			                        $txnIdExist = UserTollTxn::where('wallet_id','=',$txnIdCon)->get();
-			                        if($txnIdExist->isEmpty())
-			                        {
-			                            $userTollTxnOBJ->txn_id=$txnIdCon;     
-			                        }else
-			                        {
-			                            goto txn;
-			                        }
-		                    	}
-		                    $userTollTxnOBJ->json_data=json_encode($request->input());
-		                    try{
-		                    	$userTollTxnOBJ->save();
-		                    	DB::commit();
+                            if($userExistOBJ->wallet_amt>=$price)
+                            {
+
+    			                $userTollTxnOBJ->user_id=$request->input('user_id');
+    			                $userTollTxnOBJ->vehicle_no=$request->input('vehicle_no');
+    			                $userTollTxnOBJ->toll_amount=$price;
+    			                $userExistOBJ->wallet_amt-=$price;
+    			                $userTollTxnOBJ->wallet_id=$userExistOBJ->wallet_id;
+    			                User::where('id','=',$request->input('user_id'))->update(['wallet_amt'=>$userExistOBJ->wallet_amt]);
+    			                $userTollTxnOBJ->toll_id=$request->input('toll_id');
+    			                txn:{
+    			                        $txnId = $this->getRandomString(7);
+    			                        $txnIdCon="TNX".$txnId."";
+    			                        $txnIdExist = UserTollTxn::where('wallet_id','=',$txnIdCon)->get();
+    			                        if($txnIdExist->isEmpty())
+    			                        {
+    			                            $userTollTxnOBJ->txn_id=$txnIdCon;     
+    			                        }else
+    			                        {
+    			                            goto txn;
+    			                        }
+    		                    	}
+    		                    $userTollTxnOBJ->json_data=json_encode($request->input());
+    		                    try{
+    		                    	$userTollTxnOBJ->save();
+    		                    	DB::commit();
 
 
-                                // $devicetoken = $userExistOBJ->userDevice()->first()->device_id;
-                                // $mPushNotification = array('data' => array('title' => 'dfsddfsfd', 'message' => 'Payment Successfully.'));
-                                // $fields = array('registration_ids' => $devicetoken, 'data' => $mPushNotification);
+                                    // $devicetoken = $userExistOBJ->userDevice()->first()->device_id;
+                                    // $mPushNotification = array('data' => array('title' => 'dfsddfsfd', 'message' => 'Payment Successfully.'));
+                                    // $fields = array('registration_ids' => $devicetoken, 'data' => $mPushNotification);
 
-                                // //Sending Push Notification To Mobile Via FCM(Cloud Messanging)
-                                // $this->sendPushNotification($devicetoken,$fields); 
+                                    // //Sending Push Notification To Mobile Via FCM(Cloud Messanging)
+                                    // $this->sendPushNotification($devicetoken,$fields); 
 
-		                    	$response=[
-		                    		'status'=>200,
-		                    		'message'=>'txn is successfully completed.'
-		                    	];
-		                    }catch(\Excpetion $e)
-		                    {
-		                    	//return to client
-		                    	DB::rollback();
-		                    	$respons=[
-		                    		'status'=>501,
-		                    		'message'=>'Oops!! something went wrong please try again later.'
-		                    	];
-		                    }
+    		                    	$response=[
+    		                    		'status'=>200,
+    		                    		'message'=>'txn is successfully completed.'
+    		                    	];
+    		                    }catch(\Excpetion $e)
+    		                    {
+    		                    	//return to client
+    		                    	DB::rollback();
+    		                    	$respons=[
+    		                    		'status'=>501,
+    		                    		'message'=>'Oops!! something went wrong please try again later.'
+    		                    	];
+    		                    }
+                        }else
+                        {
+                            
+                            //return to client
+                            $response=[
+                                'status'=>501,
+                                'message'=>'insufficient balance in wallet.'
+                            ];
+                        }
+
 
     					}else
     					{
