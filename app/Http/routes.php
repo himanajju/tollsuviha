@@ -17,7 +17,8 @@ Route::get('/', function () {
 
 Route::group(['prefix' => 'api'], function () {
     // Authorization Starts
-    Route::post('/login', 'AuthorizationController@login');
+    Route::post('/web-login', 'AuthorizationController@webLogin');
+    Route::post('/app-login', 'AuthorizationController@androidLogin');
     Route::post('/registration', 'AuthorizationController@registration');
 
 

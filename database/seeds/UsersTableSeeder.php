@@ -19,6 +19,7 @@ class UsersTableSeeder extends Seeder
                                     'contact_no' => '7509206653',
                                     'wallet_amt' => '0.00',
                                     'is_active' => '1',
+                                    'is_blocked' => '0',
                                     'created_at' => '2016-11-15 00:00:00',
                                     'updated_at' => '2016-11-15 00:00:00']);
         DB::table('users')->insert(['id' => '2',
@@ -29,6 +30,29 @@ class UsersTableSeeder extends Seeder
                                     'contact_no' => '7509206653',
                                     'wallet_amt' => '0.00',
                                     'is_active' => '0',
+                                    'is_blocked' => '0',
+                                    'created_at' => '2016-11-15 00:00:00',
+                                    'updated_at' => '2016-11-15 00:00:00']);
+        DB::table('users')->insert(['id' => '3',
+                                    'usergroup_id' => '4',
+                                    'name' => 'Booth Manager',
+                                    'email' => 'manager@mail.com',
+                                    'password' => '123456',
+                                    'contact_no' => '7509206653',
+                                    'wallet_amt' => '0.00',
+                                    'is_active' => '0',
+                                    'is_blocked' => '0',
+                                    'created_at' => '2016-11-15 00:00:00',
+                                    'updated_at' => '2016-11-15 00:00:00']);
+        DB::table('users')->insert(['id' => '4',
+                                    'usergroup_id' => '2',
+                                    'name' => 'Driver',
+                                    'email' => 'driver@mail.com',
+                                    'password' => '123456',
+                                    'contact_no' => '7509206653',
+                                    'wallet_amt' => '0.00',
+                                    'is_active' => '0',
+                                    'is_blocked' => '0',
                                     'created_at' => '2016-11-15 00:00:00',
                                     'updated_at' => '2016-11-15 00:00:00']);
     }

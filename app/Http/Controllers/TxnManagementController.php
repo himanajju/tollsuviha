@@ -96,6 +96,7 @@ class TxnManagementController extends Controller
     //toll payment txn
     public function tollPayment(Request $request)
     {
+        echo "dfs";die;
     	//setting validation rules
     	$validation=Validator::make($request->toArray(),[
     		'user_id'=>'required',
@@ -115,6 +116,7 @@ class TxnManagementController extends Controller
     	{
     		
     		$userExistOBJ=User::where('id','=',$request->input('user_id'))->where('wallet_id','=',$request->input('wallet_id'))->where('usergroup_id','=','2')->where('is_active','=',1)->get();
+            print_r($userExistOBJ);die;
     		if(!$userExistOBJ->isEmpty())
     		{
     			$userExistOBJ=$userExistOBJ->first();
@@ -177,6 +179,15 @@ class TxnManagementController extends Controller
 		                    try{
 		                    	$userTollTxnOBJ->save();
 		                    	DB::commit();
+
+
+                                // $devicetoken = $userExistOBJ->userDevice()->first()->device_id;
+                                // $mPushNotification = array('data' => array('title' => 'dfsddfsfd', 'message' => 'Payment Successfully.'));
+                                // $fields = array('registration_ids' => $devicetoken, 'data' => $mPushNotification);
+
+                                // //Sending Push Notification To Mobile Via FCM(Cloud Messanging)
+                                // $this->sendPushNotification($devicetoken,$fields); 
+
 		                    	$response=[
 		                    		'status'=>200,
 		                    		'message'=>'txn is successfully completed.'
@@ -234,13 +245,12 @@ class TxnManagementController extends Controller
     //function for fetching users payment history
     public function payHistory($userId)
     {
-    	$userOBJ=User::where('id','=',$userId)->where('is_active','=',1)->where('usergroup_id','=',2)->get();
-    	if(!$userOBJ->isEmpty())
-    	{
-    		$userOBJ=$userOBJ->first();
-    		$historyOBJ=DB::select('SELECT ut.vehicle_no,ut.vehicle_type,ut.created_at,ut.toll_amount,td.toll_name FROM `user_toll_txns` ut,`toll_details` td WHERE ut.`toll_id` = td.`id` AND ut.`user_id` =:user_Id',['user_Id'=>$userId]);
+        $userOBJ=User::where('id','=',$userId)->where('is_active','=',1)->where('usergroup_id','=',2)->get();
+        if(!$userOBJ->isEmpty())
+        {
+            $userOBJ=$userOBJ->first();
+            $historyOBJ=DB::select('SELECT ut.vehicle_no,ut.vehicle_type,ut.created_at,ut.toll_amount,td.toll_name FROM `user_toll_txns` ut,`toll_details` td WHERE ut.`toll_id` = td.`id` AND ut.`user_id` =:user_Id',['user_Id'=>$userId]);
 
-    		
     		//return to client
     		$response=[
     			'status'=>200,
@@ -259,37 +269,80 @@ class TxnManagementController extends Controller
     }
 
 
-    private function sendMessage($data,$target){
-        //FCM api URL
-        $url = 'https://fcm.googleapis.com/fcm/send';
-        //api_key available in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
-        $server_key = 'AAAAnAJArSI:APA91bFigg312cRGTv1HEJ2to6ejt9Izk84nUjd3Gboz73_YhE4vjyYLdkftw-z9Lt0TUiKZr8lol-bL4RUPtO_H1WdWP3es22WkSf_yLmppetzLGciPhAoiN94Lr3T2kXFupJRU8X0p';
 
-        $fields = array();
-        $fields['data'] = $data;
-        if(is_array($target)){
-            $fields['registration_ids'] = $target;
-        }else{
-            $fields['to'] = $target;
-        }
-        //header with content_type api key
-        $headers = array(
-            'Content-Type:application/json',
-          'Authorization:key='.$server_key
-        );
+    // private function sendPushNotification($devicetoken,$fields){
+    //     $url = 'https://fcm.googleapis.com/fcm/send';
+
+    //     //building headers for the request
+    //     $headers = array(
+    //         'Authorization: key=' . 'AAAAnAJArSI:APA91bFigg312cRGTv1HEJ2to6ejt9Izk84nUjd3Gboz73_YhE4vjyYLdkftw-z9Lt0TUiKZr8lol-bL4RUPtO_H1WdWP3es22WkSf_yLmppetzLGciPhAoiN94Lr3T2kXFupJRU8X0p',
+    //         'Content-Type: application/json'
+    //     );
+
+    //     //Initializing curl to open a connection
+    //     $ch = curl_init();
+
+    //     //Setting the curl url
+    //     curl_setopt($ch, CURLOPT_URL, $url);
+        
+    //     //setting the method as post
+    //     curl_setopt($ch, CURLOPT_POST, true);
+
+    //     //adding headers 
+    //     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+    //     //disabling ssl support
+    //     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        
+    //     //adding the fields in json format 
+    //     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+
+    //     //finally executing the curl request 
+    //     $result = curl_exec($ch);
+    //     if ($result === FALSE) {
+    //         die('Curl failed: ' . curl_error($ch));
+    //     }
+
+    //     //Now close the connection
+    //     curl_close($ch);
+    // }
+
+
+
+
+    // private function sendMessage($data,$target){
+    //     //FCM api URL
+    //     $url = 'https://fcm.googleapis.com/fcm/send';
+    //     //api_key available in Firebase Console -> Project Settings -> CLOUD MESSAGING -> Server key
+    //     $server_key = 'AAAAnAJArSI:APA91bFigg312cRGTv1HEJ2to6ejt9Izk84nUjd3Gboz73_YhE4vjyYLdkftw-z9Lt0TUiKZr8lol-bL4RUPtO_H1WdWP3es22WkSf_yLmppetzLGciPhAoiN94Lr3T2kXFupJRU8X0p';
+
+    //     $fields = array();
+    //     $fields['data'] = $data;
+    //     if(is_array($target)){
+    //         $fields['registration_ids'] = $target;
+    //     }else{
+    //         $fields['to'] = $target;
+    //     }
+    //     //header with content_type api key
+    //     $headers = array(
+    //         'Content-Type:application/json',
+    //       'Authorization:key='.$server_key
+    //     );
                     
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
-        $result = curl_exec($ch);
-        if ($result === FALSE) {
-            die('FCM Send Error: ' . curl_error($ch));
-        }
-        curl_close($ch);
-        return $result;
-    }
+    //     $ch = curl_init();
+    //     curl_setopt($ch, CURLOPT_URL, $url);
+    //     curl_setopt($ch, CURLOPT_POST, true);
+    //     curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    //     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    //     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    //     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    //     curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($fields));
+    //     $result = curl_exec($ch);
+    //     if ($result === FALSE) {
+    //         die('FCM Send Error: ' . curl_error($ch));
+    //     }
+    //     curl_close($ch);
+    //     return $result;
+    // }
+}
