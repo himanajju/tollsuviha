@@ -553,10 +553,14 @@ class UserManagementController extends Controller
     //function for toll list in between to stations
     public function tollList(Request $request)
     {
+
         $validation=validator::make($request->toArray(),[
                 'source'=>'required',
-                'destination'=>'required'
+                'destination'=>'required',
+                'vehicle_type'=>'required'
             ]);
+
+        // print_r("hh");die;
         if($validation->fails())
         {
             //return to client
@@ -565,10 +569,60 @@ class UserManagementController extends Controller
                 'message'=>'validation errors',
                 'errors'=>$validation->errors()
             ];
+
         }else
         {
             
+            $src=$request->input('source');
+            $destination=$request->input('destination');
+            $vehicle_type=$request->input('vehicle_type');
+
+            $longitudeId=0;
+            $totalPrice=0;
+            $price=0;
+            if($src=="raipur" && $destination=="nagpur")
+            {
+                $longitudeId="1111";
+            }elseif ($src=="nagpur" && $destination=="delhi") {
+                $longitudeId="2222";
+            }
+            $tollListOBJ=TollDetail::where('longitude','like',$longitudeId.'%')
+                        ->select('id','toll_id','toll_name','city','state',$vehicle_type."_price")->get();
+               // print_r($longitudeId);die;
+            if(!$tollListOBJ->isEmpty())
+            {
+                $response=array('status'=>200,
+                                'message'=>'hello',
+                                'data'=>$tollListOBJ,
+                                'totalPrice'=>0);
+
+                    
+                foreach ($tollListOBJ as $tollListOBJ) {
+                    
+                    if($vehicle_type=="car_jeep_van"){
+                        $price=$tollListOBJ->car_jeep_van_price;    
+                    }elseif ($vehicle_type=="bus_truck") {
+                        $price=$tollListOBJ->bus_truck_price;
+                    }elseif ($vehicle_type=="lcv") {
+                        $price=$tollListOBJ->lcv_price;
+                    }elseif ($vehicle_type=="upto_3_axle_vehicle") {
+                        $price=$tollListOBJ->upto_3_axle_vehicle_price;
+                    }elseif ($vehicle_type=="axle_4_to_6_vehicle") {
+                        $price=$tollListOBJ->axle_4_to_6_vehicle_price;
+                    }elseif ($vehicle_type=="axle_7_or_more_vehicle") {
+                        $price=$tollListOBJ->axle_7_or_more_vehicle_price;
+                    }elseif ($vehicle_type=="hcm_eme") {
+                        $price=$tollListOBJ->hcm_eme_price;              
+                    }
+                    $totalPrice+=$price;
+                }
+                
+                // print_r($totalPrice);die;
+                $response['totalPrice']=$totalPrice;
+            }
         }
+        return response()->json($response);
+        exit;
     }
 
 }
