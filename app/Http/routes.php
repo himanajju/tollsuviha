@@ -20,6 +20,8 @@ Route::group(['prefix' => 'api'], function () {
     Route::post('/web-login', 'AuthorizationController@webLogin');
     Route::post('/app-login', 'AuthorizationController@androidLogin');
     Route::post('/registration', 'AuthorizationController@registration');
+    Route::post('/police-login', 'AuthorizationController@policeLogin');
+
 
 
     Route::group(['prefix' => 'users'], function () {
@@ -53,6 +55,10 @@ Route::group(['prefix' => 'api'], function () {
 
     Route::group(['prefix'=>'vehicle'],function(){
     	Route::get('/get-details/{vechile_no}/{userId}/{tollId}','UserManagementController@getVechileDetails');
+        Route::post('/add-suspected','UserManagementController@addSuspectedVehicle');
+        Route::post('/unsuspected','UserManagementController@unsuspectedVehicle');
+
+
 
     });
 });

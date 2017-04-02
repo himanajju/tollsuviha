@@ -13,6 +13,7 @@ use App\TollDetail;
 use App\VipUser;
 use App\Vehicle;
 use App\TollUser;
+use App\SuspectedVehicle;
 use DB;
 
 class UserManagementController extends Controller
@@ -35,7 +36,7 @@ class UserManagementController extends Controller
                          'errors'    => $validation->errors()];
         }else{
             //Getting usergroup
-            $usergroupOBJ = Usergroup::where('id', '=', $request->input('usergroup'))->get();
+            $usergroupOBJ = Usergroup::where('id','=', $request->input('usergroup'))->get();
             if(!$usergroupOBJ->isEmpty()){
                 DB::beginTransaction();
 
@@ -55,7 +56,7 @@ class UserManagementController extends Controller
                     //saving user detail
                     $newUserOBJ->save();
 
-                    if($usergroupOBJ->group_title == "MANAGER" || $usergroupOBJ->group_title == "BOOTH_OPERATOR"){
+                    if($usergroupOBJ->group_title == "MANAGER" || $usergroupOBJ->group_title == "BOOTH_OPERATOR" || $usergroupOBJ->group_title == "POLICE"){
                         $tollOBJ = TollDetail::where('id', '=', 1)->get();
                         if(!$tollOBJ->isEmpty()){   
                             $tollUserOBJ = new TollUser();
@@ -145,12 +146,13 @@ class UserManagementController extends Controller
         }else
         {
             //getting user is exist
-            $userExistObj=User::where('id','=',$request->input('id'))->get();
+            $user_id= str_replace('"', '', $request->input('id'));
+            $userExistObj=User::where('id','=',$user_id)->get();
             if(!$userExistObj->isEmpty()){
                 
                 try{
                     //updating data
-                    User::where('id',$request->input('id'))
+                    User::where('id',$user_id)
                     ->update([
                         'name'=>$request->input('name'),
                         'email'=>$requestd->input('email'),
@@ -515,14 +517,15 @@ class UserManagementController extends Controller
             ];
         }else
         {
-            $userExistOBJ=User::where('id','=',$request->input('user_id'))->where('is_active','=',1)->where('is_blocked','=',0)->get();
+            $user_id= str_replace('"', '', $request->input('user_id'));
+            $userExistOBJ=User::where('id','=',$user_id)->where('is_active','=',1)->where('is_blocked','=',0)->get();
             if(!$userExistOBJ->isEmpty())
             {
                 $userExistOBJ=$userExistOBJ->first();
                 if($userExistOBJ->password==$request->input('oldPassword'))
                 {
-                    User::where('id','=',$request->input('user_id'))->where('password','=',$request->input('oldPassword'))
-                    ->update(['password'=>$request->input('newPassword'),'update_by'=>$request->input('user_id')]);
+                    User::where('id','=',$user_id)->where('password','=',$request->input('oldPassword'))
+                    ->update(['password'=>$request->input('newPassword'),'update_by'=>$user_id]);
 
                     //return to client
                     $response=[
@@ -626,6 +629,119 @@ class UserManagementController extends Controller
         }
         return response()->json($response);
         exit;
+    }
+
+    //function for suspected vehicle
+    public function addSuspectedVehicle(Request $request)
+    {
+        $validation=validator::make($request->toArray(),[
+                'vehicle_no'=>'required',
+                'user_id'=>'required'
+            ]);
+        if($validation->fails())
+        {
+            $response=['status'=>500,
+                'message'=>'validation errors',
+                'errors'=>$validation->errors()
+            ];
+        }else
+        {
+            $user_id= str_replace('"', '', $request->input('user_id'));
+            $userExistOBJ=User::where('id','=',$user_id)->where('usergroup_id','=',5)->get();
+            if(!$userExistOBJ->isEmpty())
+            {
+                    $SuspectedVehicleOBJ= new SuspectedVehicle();
+                    $SuspectedVehicleOBJ->vehicle_no=$request->input('vehicle_no');
+                    $SuspectedVehicleOBJ->remarks=$request->input('remark');
+                    $SuspectedVehicleOBJ->created_by=$user_id;
+                    try{
+                        $SuspectedVehicleOBJ->save();
+                        //return to client
+                        $response=[
+                            'status'=>200,
+                            'message'=>'suspected vehicle number is Successfully registrated.'
+                        ];
+                    }catch(\Exception $e)
+                    {
+                        //return to client
+                        $response=[
+                            'status'=>501,
+                            'message'=>'Oops!! something went wrong please try again later.',
+                            'errors'=>$e
+                        ];
+                    }
+            }else
+            {
+                //return to client
+                $response=[
+                    'status'=>501,
+                    'message'=>'user does not exist.'
+
+                ];
+            }
+        }
+        return response()->json($response);
+        exit;
+    }
+
+    //function for unsuspected vehicle
+    public function unsuspectedVehicle(Request $request)
+    {
+        $validation=validator::make($request->toArray(),[
+                'vehicle_no'=>'required',
+                'user_id'=>'required'
+            ]);
+        if($validation->fails())
+        {
+            $response=['status'=>500,
+                'message'=>'validation errors',
+                'errors'=>$validation->errors()
+            ];
+        }else
+        {
+            $user_id= str_replace('"', '', $request->input('user_id'));
+            $userExistOBJ=User::where('id','=',$user_id)->where('usergroup_id','=',5)->get();
+            if(!$userExistOBJ->isEmpty())
+            {
+                    $is_SuspectedOBJ=SuspectedVehicle::where('vehicle_no','=',$request->input('vehicle_no'))->where('is_active','=',1)->get();
+                    if(!$is_SuspectedOBJ->isEmpty())
+                    {
+                        $is_SuspectedOBJ=$is_SuspectedOBJ->first();
+                        SuspectedVehicle::where('vehicle_no','=',$request->input('vehicle_no'))
+                                        ->update(['is_active'=>0]);
+                        $response=[
+                            'status'=>200,
+                            'message'=>'vehicle is unsuspected.'
+                        ];
+
+                    }else
+                    {
+                        $response=[
+                            'status'=>501,
+                            'message'=>'vehicle is not Suspected.'
+                            ];
+                    }
+            }else
+            {
+                //return to client
+                $response=[
+                    'status'=>501,
+                    'message'=>'user does not exist.'
+
+                ];
+            }
+        }
+        return response()->json($response);
+        exit;
+
+    }
+
+    //function for suspected vehicle crossed toll plaza
+    public function SuspectedVehicleToll()
+    {
+        $SuspectedVehicleOBJ=SuspectedVehicle::where('is_active','=',1)->->get();
+
+
     }
 
 }

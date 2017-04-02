@@ -118,6 +118,61 @@ class AuthorizationController extends Controller
         exit;
     }
 
+    //function for police login
+    public function policeLogin(Request $request)
+    {
+        $validation = Validator::make($request->toArray(),[ 
+            'email' => 'required',
+            'password' => 'required'
+        ]);
+
+        if($validation->fails())
+        {
+            $response=[
+                'status'=>500,
+                'message'=>'validation errors',
+                'errors'=>$validation->errors()
+            ];
+        }else
+        {
+            $userExistOBJ=User::where('email','=',$request->input('email'))->where('is_active','=',1)->get();
+            if(!$userExistOBJ->isEmpty())
+            {
+                $userExistOBJ=$userExistOBJ->first();
+                if($userExistOBJ->password==$request->input('password'))
+                {
+                    $responseData=array(
+                        'id'=>$userExistOBJ->id,
+                        'name'=>$userExistOBJ->name,
+                        'email'=>$userExistOBJ->email,
+                        'contact_no'=>$userExistOBJ->contact_no,
+                        'created_at'=>$userExistOBJ->created_at
+                        );
+                    $response=[
+                        'status'=>200,
+                        'message'=>'access granted.',
+                        'data'=>$responseData
+                        ];
+                }else
+                {
+                    $response=[
+                        'status'=>501,
+                        'message'=>'user password incorrect.'
+                    ];
+                }
+            }
+            else
+            {
+                $response=[
+                    'status'=>501,
+                    'message'=>'user does not exist.'
+                ];
+            }
+        }
+        return response()->json($response);
+        exit;
+    }
+
     //fucntion for genrating random string
     private static function getRandomString($length){
         $chars = '0123456789';
