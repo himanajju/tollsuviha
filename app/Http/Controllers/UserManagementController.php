@@ -658,6 +658,7 @@ class UserManagementController extends Controller
                     try{
                         $SuspectedVehicleOBJ->save();
                         //return to client
+                        
                         $response=[
                             'status'=>200,
                             'message'=>'suspected vehicle number is Successfully registrated.'
@@ -760,9 +761,9 @@ class UserManagementController extends Controller
         ];
         return response()->json($response);
         exit;
-
-
     }
+
+
 
 }
 

@@ -131,10 +131,7 @@ class TxnManagementController extends Controller
     			{
     				$vehicleOBJ=$vehicleOBJ->first();
 
-                    $suspectedVehicleOBJ=SuspectedVehicle::where('vehicle_no','=',$request->input('vehicle_no'))->where('is_active','=',1)->get();
-                    if($suspectedVehicleOBJ->isEmpty())
-                    {
-        				//print_r("hs");die;
+                    	//print_r("hs");die;
                         $tollOBJ=TollDetail::where('id','=',$request->input('toll_id'))->get();
 
         				if(!$tollOBJ->isEmpty())
@@ -201,6 +198,16 @@ class TxnManagementController extends Controller
 
                                         // //Sending Push Notification To Mobile Via FCM(Cloud Messanging)
                                         // $this->sendPushNotification($devicetoken,$fields); 
+                                        $suspectedVehicleOBJ=SuspectedVehicle::where('vehicle_no','=',$request->input('vehicle_no'))->where('is_active','=',1)->get();
+                    if(!$suspectedVehicleOBJ->isEmpty())
+                    {
+                        
+                       $alertOBJ=new Alert;
+                       $alert->vehicle_no=$Request->input('vehicle_no');
+                       $alert->remarks="vehicle is suspected by police plzz stop him.";
+                       $alert->save();
+
+                    }
 
         		                    	$response=[
         		                    		'status'=>200,
@@ -243,15 +250,7 @@ class TxnManagementController extends Controller
             						'message'=>'toll does not exist.'
             					];
             				}
-                    }else
-                        {
-                            //return to client
-                            $response=[
-                                'status'=>501,
-                                'message'=>'vehicle is suspected plzz inform to nearest police station.'
-                            ];
-                        }
-
+                    
     			}else
     			{
     				//return to client
