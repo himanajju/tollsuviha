@@ -12,6 +12,7 @@ use App\Usergroup;
 use App\TollDetail;
 use App\VipUser;
 use App\Vehicle;
+use App\UserTollTxn;
 use App\TollUser;
 use App\SuspectedVehicle;
 use DB;
@@ -739,7 +740,26 @@ class UserManagementController extends Controller
     //function for suspected vehicle crossed toll plaza
     public function SuspectedVehicleToll()
     {
-        $SuspectedVehicleOBJ=SuspectedVehicle::where('is_active','=',1)->->get();
+       $SuspectedVehicleOBJ=SuspectedVehicle::where('is_active','=',1)->get();
+       $resultSet=array();
+       foreach ($SuspectedVehicleOBJ as $SuspectedVehicleOBJ1) {
+
+        $tollPassOBJ=UserTollTxn::where('vehicle_no','=',$SuspectedVehicleOBJ1->vehicle_no)->where('created_at','>=',$SuspectedVehicleOBJ1->created_at)->orderBy('created_at','desc')->get();
+       // print_r($tollPassOBJ->toll_id);die;
+        foreach ($tollPassOBJ as $tollPassOBJ1) {
+                  $tolldetailOBJ=TollDetail::where('id','=',1)->get()->first();  
+                    array_push($resultSet,$SuspectedVehicleOBJ1,$tollPassOBJ,$tolldetailOBJ);
+      
+        }
+
+       }
+       $response=[
+        'status'=>200,
+        'message'=>'fetched Successfully.',
+        'data'=>$resultSet
+        ];
+        return response()->json($response);
+        exit;
 
 
     }

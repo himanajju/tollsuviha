@@ -55,6 +55,7 @@ Route::group(['prefix' => 'api'], function () {
 
     Route::group(['prefix'=>'vehicle'],function(){
     	Route::get('/get-details/{vechile_no}/{userId}/{tollId}','UserManagementController@getVechileDetails');
+        Route::post('/suspected-list','UserManagementController@SuspectedVehicleToll');
         Route::post('/add-suspected','UserManagementController@addSuspectedVehicle');
         Route::post('/unsuspected','UserManagementController@unsuspectedVehicle');
 
